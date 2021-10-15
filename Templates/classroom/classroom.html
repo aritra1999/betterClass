@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+    <title>BetterClass | {{ title }}</title>
+</head>
+
+<body class="">
+    <div class="max-w-screen max-h-screen flex">
+        <div class="flex flex-col w-4/5 h-screen p-4">
+            <div class="message-area h-full mb-4">
+                <div class="flex h-full items-center justify-center bg-gray-200 rounded-lg" id="board">
+                    Board Area
+                </div>
+            </div>
+            <div class="class-details h-16 bg-gray-200 flex justify-center rounded-lg items-center">
+                <div class="flex w-full p-2">
+                    <div class="p-3 w-full w-full flex items-center" x-data="{ tooltip: false }"> 
+                        {{ classroom.name }}
+                        <svg x-on:click="tooltip = !tooltip"
+                            xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 text-gray-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div x-show="tooltip" @click="tooltip = false" class="fixed inset-0 h-full w-full z-10"></div>
+                        <div class="relative" x-cloak x-show.transition.origin.top="tooltip">
+                            <div class="absolute top-0 z-10 text-gray-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
+                                <span class="font-bold text-black"> Class name: </span>  {{ classroom.name }} <br>
+                                <span class="font-bold text-black"> Class ID: </span>  {{ classroom.slug }} <br>
+                                <span class="font-bold text-black"> Created by: </span>{{ classroom.created_by.first_name }} {{ classroom.created_by.last_name }}, {{ classroom.created_by }} <br>
+                                <span class="font-bold text-black"> Created on: </span> {{ classroom.timestamp }} <br>
+                            </div>
+                        </div>
+                    </div>
+                    <a type="button" href="{% url 'home' %}"
+                        class="w-40 flex justify-center items-center bg-red-500 hover:bg-red-700 rounded-lg text-white text-sm">
+                        Leave
+                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="chat flex w-1/5 h-screen flex-col pt-4 pb-4 pr-4" x-data="setup()">
+            <div class="max-h-16 bg-gray-200 flex justify-center rounded-lg items-center mb-4">
+                <ul class="flex justify-center items-center ">
+                    <template x-for="(tab, index) in tabs" :key="index">
+                        <li class="cursor-pointer py-2 px-2 text-gray-500 border-b-2"
+                            :class="activeTab===index ? 'text-blue-500 border-blue-500' : ''" @click="activeTab = index"
+                            x-text="tab"></li>
+                    </template>
+                    <span class="px-3 py-0.5 bg-black text-white rounded-xl" id="user-count"></span>
+                </ul>
+            </div>
+            <div x-show="activeTab===0" class="relative h-full bg-gray-200 rounded-lg">
+                <div class="bg-gray-200 rounded-lg">
+                    <div class="message overflow-y-scroll text-sm" style="height: 87vh;" id="chat-log">
+                        {% for message in messages %}
+                        <div class="message border-b border-gray-300 m-2 px-2 py-3">
+                            <div class="mb-2 flex justify-between">
+                                <div class="text-gray-600 text-xs font-bold">
+                                    {{ message.sent_by }}
+                                </div>
+                                <div class="text-gray-500 text-xs">
+                                    {{ message.timestamp }}
+                                </div>
+                            </div>
+                            {{ message.message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="absolute w-full bottom-0 chat-form h-16 bg-gray-300 flex justify-center rounded-b-lg items-center">
+                    <div class="flex  p-2">
+                        <input type="text" id="chat-message-input" name="message" placeholder="Eneter message" class="p-3 w-auto bg-transparent w-full text-sm" />
+                        <button id="chat-message-submit"
+                            class="w-40 flex justify-center items-center bg-blue-700 rounded-lg text-white text-sm">
+                            Send
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div x-show="activeTab===1" class="h-full bg-gray-200 p-2 rounded-lg overflow-y-scroll" id="participants">
+                
+            </div>
+        </div>
+
+    </div>
+
+
+
+    {{ classroom.slug|json_script:"room-name" }}
+    {{ request.user.username|json_script:"user-name" }}
+
+    <script src="{% static 'classroom.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</body>
+
+</html>

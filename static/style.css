@@ -1,0 +1,26 @@
+html,
+body {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    scroll-behavior: smooth;
+}
+
+* {
+    outline: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #7f7f7f;
+    border-radius: 10px;
+}

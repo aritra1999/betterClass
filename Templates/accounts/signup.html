@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block extraHead %}{% endblock extraHead %}
+
+{% block content %}
+
+<div class="flex">
+    <div class="m-auto lg:w-1/4 md:w-1/2 w-full">
+        <h1 class="inline-block text-3xl font-extrabold text-gray-900 tracking-tight mb-4">Create account</h1>
+        <hr class="mb-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="relative mb-4">
+                <label for="fname" class="block mb-2 text-gray-700">First name</label>
+                <input type="text" id="fname" name="f_name" placeholder="First name" class="p-3 bg-gray-100 rounded-lg border focus:border-gray-200 w-full" />
+            </div>
+            <div class="relative mb-4">
+                <label for="lname" class="block mb-2 text-gray-700">Last name</label>
+                <input type="text" id="lname" name="l_name" placeholder="Last name" class="p-3 bg-gray-100 rounded-lg border focus:border-gray-200 w-full" />
+            </div>
+            <div class="relative mb-4">
+                <label for="email" class="block mb-2 text-gray-700">Email</label>
+                <input type="text" id="email" name="email" placeholder="Email" class="p-3 bg-gray-100 rounded-lg border focus:border-gray-200 w-full" />
+            </div>
+            <div class="relative mb-6">
+                <label for="password" class="block mb-2 text-gray-700">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" class="p-3 bg-gray-100 rounded-lg border focus:border-gray-200 w-full" />
+            </div>
+            <div class="relative mb-6">
+                <label for="cnfrm_password" class="block mb-2 text-gray-700">Confirm Password</label>
+                <input type="password" id="cnfrm_password" name="cnfrm_password" placeholder="Confirm Password" class="p-3 bg-gray-100 rounded-lg border focus:border-gray-200 w-full" />
+            </div>
+            <div class="relative mb-4">
+                <button type="submit" class="p-3 w-full flex justify-center items-center bg-blue-700 text-white rounded-lg">
+                    Create account
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </button>
+            </div>
+            <div>
+                <a href="#" class="text-blue-700">Already have an account?</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extraFoot %}{% endblock extraFoot %}
