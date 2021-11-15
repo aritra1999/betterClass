@@ -4,7 +4,7 @@ Major Project
 ### Setup in local
 
 ### Setup Redis for Channels.
-Redis dicker container `docker run -p 6379:6379 -d redis`  
+Redis docker container `docker run -p 6379:6379 -d redis`  
 
 ### Setup Django app.
 Create virtual env `python3 -m venv venv`  
