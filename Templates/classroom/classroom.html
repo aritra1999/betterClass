@@ -11,21 +11,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+    <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script>
     <title>BetterClass | {{ title }}</title>
 </head>
 
-<body class="">
+<body>
     <div class="max-w-screen max-h-screen flex">
         <div class="flex flex-col w-4/5 h-screen p-4">
-            <div class="message-area h-full mb-4">
+            <div class="message-area h-full mb-4 relative">
+                <div class="absolute w-auto h-12 bg-gray-300 rounded-tr-lg rounded-bl-lg right-0 flex justify-center items-center px-2">
+                    {% if classroom.created_by == request.user %}
+                        <div class="flex my-auto">
+                            <button id="draw-clear" type="button" class="h-8 bg-blue-700 text-white py-1 px-3 rounded-md mr-6">Clear Board</button>
+                            <select id="draw-color-select" name="colors" class="rounded-md py-1 px-3 h-8 bg-gray-400">
+                                <option value="#000000">Black</option>
+                                <option value="#ff0000">Red</option>
+                                <option value="#00ff00">Green</option>
+                                <option value="#0000ff">Blue</option>
+                            </select>
+                        </div>
+                    {% endif %}    
+                </div>
                 <div class="flex h-full items-center justify-center bg-gray-200 rounded-lg" id="board">
-                    Board Area
+                    <canvas id="draw-canvas" height="1000" width="1600"></canvas>
                 </div>
             </div>
             <div class="class-details h-16 bg-gray-200 flex justify-center rounded-lg items-center">
-                <div class="flex w-full p-2">
-                    <div class="p-3 w-full w-full flex items-center" x-data="{ tooltip: false }"> 
-                        {{ classroom.name }}
+                <div class="flex w-full p-2 justify-between">
+                    <div class="p-3 flex items-center" x-data="{ tooltip: false }"> 
+                        {{ classroom.name }} 
                         <svg x-on:click="tooltip = !tooltip"
                             xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 text-gray-400" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -42,16 +56,13 @@
                             </div>
                         </div>
                     </div>
-                    <a type="button" href="{% url 'home' %}"
-                        class="w-40 flex justify-center items-center bg-red-500 hover:bg-red-700 rounded-lg text-white text-sm">
-                        Leave
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-
-                    </a>
+                    <div class="flex items-center justify-center space-x-4">
+                        <a type="button" href="{% url 'home' %}" class="w-10 h-10 p-2 flex justify-center items-center bg-red-500 hover:bg-red-700 rounded-full text-white text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,11 +70,11 @@
             <div class="max-h-16 bg-gray-200 flex justify-center rounded-lg items-center mb-4">
                 <ul class="flex justify-center items-center ">
                     <template x-for="(tab, index) in tabs" :key="index">
-                        <li class="cursor-pointer py-2 px-2 text-gray-500 border-b-2"
-                            :class="activeTab===index ? 'text-blue-500 border-blue-500' : ''" @click="activeTab = index"
+                        <li class="cursor-pointer py-2 px-2 text-gray-500 text-sm border-b-2"
+                            :class="activeTab===index ? 'text-blue-700 text-sm border-blue-700' : ''" @click="activeTab = index"
                             x-text="tab"></li>
                     </template>
-                    <span class="px-3 py-0.5 bg-black text-white rounded-xl" id="user-count"></span>
+                    <span class="px-2 pb-0.5 pt-1 bg-black text-white rounded-lg text-xs" id="user-count"></span>
                 </ul>
             </div>
             <div x-show="activeTab===0" class="relative h-full bg-gray-200 rounded-lg">
@@ -83,7 +94,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                </div>
+                </div>                
                 <div class="absolute w-full bottom-0 chat-form h-16 bg-gray-300 flex justify-center rounded-b-lg items-center">
                     <div class="flex  p-2">
                         <input type="text" id="chat-message-input" name="message" placeholder="Eneter message" class="p-3 w-auto bg-transparent w-full text-sm" />
@@ -95,6 +106,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
+                            
                         </button>
                     </div>
                 </div>
@@ -110,9 +122,136 @@
 
     {{ classroom.slug|json_script:"room-name" }}
     {{ request.user.username|json_script:"user-name" }}
-
     <script src="{% static 'classroom.js' %}"></script>
+    <script>
+        let drawSocket = new WebSocket('ws://' + window.location.host + '/ws/drawshare/' + roomName + '/');        
+        let x1;
+        let y1;
+        let x2;
+        let y2;
+
+        drawSocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            let color = data['color'];
+            let x1 = data['x1'];
+            let y1 = data['y1'];
+            let x2 = data['x2'];
+            let y2 = data['y2'];
+            let our_canvas = document.getElementById("draw-canvas");
+            let ctx = our_canvas.getContext("2d");
+           
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = color;
+            ctx.isDrawingMode = true;
+            ctx.stroke();
+        };
+        
+        let teacher = "{{ classroom.created_by }}";
+        let user = "{{ request.user }}";
+
+
+
+        if(teacher === user){
+            document.querySelector('#draw-canvas').addEventListener("mousedown", function(e){
+                document.querySelector('#draw-canvas').onmousemove = function(e) {
+                    
+                        cord_start(e); 
+                        cord_end(); 
+                        capture_draw();
+                    
+                };
+            
+            });
+
+            document.querySelector('#draw-canvas').addEventListener("mouseup", function(e){
+                document.querySelector('#draw-canvas').onmousemove = null
+            });
+
+            document.querySelector('#draw-canvas').ontouchstart = function(e) {
+                cord_touch(e, "start")
+            };
+            
+            document.querySelector('#draw-canvas').ontouchmove = function(e) {
+                cord_touch(e, "end"); 
+                capture_draw(); 
+                cord_pass_down()
+            };
+            
+            document.querySelector('#draw-clear').onclick = function(){
+                clear_draw()
+            };
+        }
+
+        
+
+        function cord_start(e){
+            if (e.pageX || e.pageY) {
+                x1 = e.pageX;
+                y1 = e.pageY;
+            } else {
+                x1 = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                y1 = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+            x1 -= document.querySelector('#draw-canvas').offsetLeft;
+            y1 -= document.querySelector('#draw-canvas').offsetTop;
+        }
+
+        function cord_end(){
+            x2 = x1 + 1;
+            y2 = y1 + 1;
+        }
+
+        function cord_touch(e, state){
+            let x,y;
+            if (e.changedTouches[e.changedTouches.length-1].pageX || e.changedTouches[e.changedTouches.length-1].pageY) {
+                x = e.changedTouches[e.changedTouches.length-1].pageX;
+                y = e.changedTouches[e.changedTouches.length-1].pageY;
+            } else {
+                x = e.changedTouches[e.changedTouches.length-1].clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                y = e.changedTouches[e.changedTouches.length-1].clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+            x -= document.querySelector('#draw-canvas').offsetLeft;
+            y -= document.querySelector('#draw-canvas').offsetTop;
+            if (state === "start"){
+                x1 = x;
+                y1 = y;
+            } else {
+                x2 = x;
+                y2 = y;
+            }
+        }
+
+        function cord_pass_down(){
+            x1 = x2;
+            y1 = y2;
+        }
+
+        function capture_draw(){
+            let drawColor = document.querySelector('#draw-color-select');
+
+            drawSocket.send(JSON.stringify({
+                'color': drawColor.value,
+                'x1': x1,
+                'y1': y1,
+                'x2': x2,
+                'y2': y2
+            }));
+        }
+
+        function clear_draw(){
+            let our_canvas = document.getElementById("draw-canvas");
+            let ctx = our_canvas.getContext("2d");
+
+            ctx.clearRect(0,0, our_canvas.width, our_canvas.height);
+        }
+
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
 </body>
 
 </html>

@@ -1,6 +1,9 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+from classroom.models import Classroom
 
 def signin_view(request):
     if request.user.is_authenticated:
@@ -22,9 +25,9 @@ def signin_view(request):
 
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect('/dashboard/')
+        return redirect('/')
     context = {
-        'title': 'SignUp',
+        'title': 'Sign Up',
     }
     if request.method == "POST":
         password1 = request.POST.get('password')
@@ -49,3 +52,13 @@ def signup_view(request):
         else:
             context['error'] = "Passwords don't match!"
     return render(request, 'accounts/signup.html', context)
+
+
+@login_required
+def profile_view(request):
+    classrooms = Classroom.objects.filter(created_by=request.user)
+    context = {
+        'classrooms': classrooms
+    }
+
+    return render(request, 'accounts/profile.html', context)

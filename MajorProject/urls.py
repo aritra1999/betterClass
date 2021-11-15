@@ -6,8 +6,8 @@ from home.views import (
     home_view
 )
 
-from accounts.views import signin_view, signup_view
-from classroom.views import classroom_view
+from accounts.views import signin_view, signup_view, profile_view
+from classroom.views import classroom_view, delete_classroom
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,4 +19,7 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view(), name="logout"),
 
     path('<classroom_slug>', classroom_view, name='classroom'),
+
+    path('delete/<classroom>', delete_classroom, name='delete_class'),
+    path('profile/', profile_view, name='profile')
 ]

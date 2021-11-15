@@ -24,3 +24,23 @@ body {
     background: #7f7f7f;
     border-radius: 10px;
 }
+
+#draw-canvas{
+    display: block;
+    cursor: crosshair;
+}
+
+#draw-color-select{
+    display: inline-block;
+}
+
+#draw-clear{
+    display: inline-block;
+}
+
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+}

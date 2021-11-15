@@ -18,7 +18,7 @@ def home_view(request):
 
 
             return redirect('/' + str(classroom.slug))
-        
+        context['classrooms'] = Classroom.objects.all()
         
     
     return render(request, 'home/home.html', context)

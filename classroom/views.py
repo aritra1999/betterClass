@@ -3,10 +3,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
-
 from .models import Classroom, Message
-
-
 
 @login_required
 def classroom_view(request, classroom_slug):
@@ -32,4 +29,19 @@ def disconnect_user(request, classroom):
     Classroom.objects.get(slug=classroom).users.remove(request.user)
 
     return redirect('/')
+
+
+@login_required
+def delete_classroom(request, classroom):
+    try: 
+        classroom = Classroom.objects.get(slug=classroom)
+        if request.user == classroom.created_by:
+            classroom.delete()
+        else:
+            return HttpResponse("You're not the owner of the class.")    
+        return redirect('/')
+    except:
+        return HttpResponse('500 Internal Server Error.')
+    
+
 

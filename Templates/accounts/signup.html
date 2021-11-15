@@ -6,6 +6,11 @@
 
 <div class="flex">
     <div class="m-auto lg:w-1/4 md:w-1/2 w-full">
+        {% if error %}
+            <div class="mb-3 text-red-500">
+                {{ error }}
+            </div>
+        {% endif %}
         <h1 class="inline-block text-3xl font-extrabold text-gray-900 tracking-tight mb-4">Create account</h1>
         <hr class="mb-4">
         <form action="" method="POST">
@@ -39,7 +44,7 @@
                 </button>
             </div>
             <div>
-                <a href="#" class="text-blue-700">Already have an account?</a>
+                <a href="{% url 'signin' %}" class="text-blue-700">Already have an account?</a>
             </div>
         </form>
     </div>

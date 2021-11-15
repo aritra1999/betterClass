@@ -8,17 +8,10 @@ function getTime(){
     return months[d.getMonth()] + ". " + d.getDate() + ", " + d.getFullYear() + ", " + (d.getHours()%12 == 0?12 : d.getHours()) + ":" + d.getMinutes() + " " + ampm;
 }
 
-const chatSocket = new WebSocket(
-    'ws://' +
-    window.location.host +
-    '/ws/chat/' +
-    roomName +
-    '/'
-);
+const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
 
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    console.log(data);
     if(data.meta == 'new_message'){
         document.querySelector('#chat-log').innerHTML += `
         <div class="message border-b border-gray-300 m-2 px-2 py-3">
@@ -35,7 +28,7 @@ chatSocket.onmessage = function (e) {
         `;
     }else if(data.meta == 'new_user'){
         document.querySelector('#chat-log').innerHTML += `
-        <div class="m-2 px-4 py-1 text-green-500 font-bold rounded-lg">
+        <div class=" border-b border-gray-300 m-2 px-2 pb-3 text-green-500 font-bold rounded-lg">
             ` + data.new_user + ` has joined the classroom.  
         </div>
         `;
@@ -53,7 +46,7 @@ chatSocket.onmessage = function (e) {
 
         document.querySelector('#user-count').innerHTML = parseInt(document.querySelector('#user-count').innerHTML) - 1;
         document.querySelector('#chat-log').innerHTML += `
-        <div class="m-2 px-4 py-3 text-red-500 font-bold rounded-lg">
+        <div class="border-b border-gray-300 m-2 px-4 py-3 text-red-500 font-bold rounded-lg">
             ` + data.new_user + ` has joined the classroom.  
         </div>
         `;
