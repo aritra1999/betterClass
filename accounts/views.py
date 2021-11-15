@@ -7,7 +7,7 @@ from classroom.models import Classroom
 
 def signin_view(request):
     if request.user.is_authenticated:
-        return redirect('/dashboard/')
+        return redirect('/')
     context = {
         'title': 'Sign In'
     }
