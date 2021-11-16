@@ -19,20 +19,32 @@
     <div class="max-w-screen max-h-screen flex">
         <div class="flex flex-col w-4/5 h-screen p-4">
             <div class="message-area h-full mb-4 relative">
-                <div class="absolute w-auto h-12 bg-gray-300 rounded-tr-lg rounded-bl-lg right-0 flex justify-center items-center px-2">
-                    {% if classroom.created_by == request.user %}
-                        <div class="flex my-auto">
-                            <button id="draw-clear" type="button" class="h-8 bg-blue-700 text-white py-1 px-3 rounded-md mr-6">Clear Board</button>
-                            <select id="draw-color-select" name="colors" class="rounded-md py-1 px-3 h-8 bg-gray-400">
-                                <option value="#000000">Black</option>
-                                <option value="#ff0000">Red</option>
-                                <option value="#00ff00">Green</option>
-                                <option value="#0000ff">Blue</option>
-                            </select>
+                {% if classroom.created_by == request.user %}
+                    <div class="absolute w-auto h-12 bg-gray-200 rounded-lg left-0 flex justify-center items-center px-2">
+                        <div class="flex">
+                            <div class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" id="white" onclick="color(this)">
+                                Eraser
+                                <svg class="ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="currentColor" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z"/></svg>
+                            </div>
+                            <button id="draw-clear" class="h-8 bg-blue-700 text-white py-1 px-3 rounded-md ml-3">
+                                <div class="flex justify-center items-center">
+                                    Clear Board
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="flex space-x-4 h-6 my-auto ml-3">
+                                <div class="h-6 w-6 rounded-full bg-green-500" id="green" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-blue-500" id="blue" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-red-500" id="red" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-yellow-200" id="yellow" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-black" id="black" onclick="color(this)"></div>                    
+                            </div>
                         </div>
-                    {% endif %}    
-                </div>
-                <div class="flex h-full items-center justify-center bg-gray-200 rounded-lg" id="board">
+                    </div>
+                {% endif %}    
+                <div class="flex h-full items-center justify-center rounded-lg" id="board">
                     <canvas id="draw-canvas" height="1000" width="1600"></canvas>
                 </div>
             </div>
@@ -77,8 +89,8 @@
                     <span class="px-2 pb-0.5 pt-1 bg-black text-white rounded-lg text-xs" id="user-count"></span>
                 </ul>
             </div>
-            <div x-show="activeTab===0" class="relative h-full bg-gray-200 rounded-lg">
-                <div class="bg-gray-200 rounded-lg">
+            <div x-show="activeTab===0" class="relative h-full bg-gray-100 rounded-lg">
+                <div class="bg-gray-100 rounded-lg">
                     <div class="message overflow-y-scroll text-sm" style="height: 87vh;" id="chat-log">
                         {% for message in messages %}
                         <div class="message border-b border-gray-300 m-2 px-2 py-3">
@@ -95,7 +107,7 @@
                         {% endfor %}
                     </div>
                 </div>                
-                <div class="absolute w-full bottom-0 chat-form h-16 bg-gray-300 flex justify-center rounded-b-lg items-center">
+                <div class="absolute w-full bottom-0 chat-form h-16 bg-gray-200 flex justify-center rounded-b-lg items-center">
                     <div class="flex  p-2">
                         <input type="text" id="chat-message-input" name="message" placeholder="Eneter message" class="p-3 w-auto bg-transparent w-full text-sm" />
                         <button id="chat-message-submit"
@@ -124,30 +136,11 @@
     {{ request.user.username|json_script:"user-name" }}
     <script src="{% static 'classroom.js' %}"></script>
     <script>
+        
         let drawSocket = new WebSocket('ws://' + window.location.host + '/ws/drawshare/' + roomName + '/');        
-        let x1;
-        let y1;
-        let x2;
-        let y2;
 
-        drawSocket.onmessage = function(e) {
-            let data = JSON.parse(e.data);
-            let color = data['color'];
-            let x1 = data['x1'];
-            let y1 = data['y1'];
-            let x2 = data['x2'];
-            let y2 = data['y2'];
-            let our_canvas = document.getElementById("draw-canvas");
-            let ctx = our_canvas.getContext("2d");
-           
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = color;
-            ctx.isDrawingMode = true;
-            ctx.stroke();
-        };
+        let canvas, ctx, flag = false, prevX = 0, currX = 0, prevY = 0, currY = 0, dot_flag = false;
+        let x = "Black", y = 2;
         
         let teacher = "{{ classroom.created_by }}";
         let user = "{{ request.user }}";
@@ -155,99 +148,175 @@
 
 
         if(teacher === user){
-            document.querySelector('#draw-canvas').addEventListener("mousedown", function(e){
-                document.querySelector('#draw-canvas').onmousemove = function(e) {
-                    
-                        cord_start(e); 
-                        cord_end(); 
-                        capture_draw();
-                    
-                };
             
-            });
+            window.onload = function() {
+                canvas = document.getElementById("draw-canvas");
+                ctx = canvas.getContext("2d");
+                w = canvas.width;
+                h = canvas.height;
+            
+                canvas.addEventListener("mousemove", function (e) {
+                    findxy('move', e)
+                }, false);
+                canvas.addEventListener("mousedown", function (e) {
+                    findxy('down', e)
+                }, false);
+                canvas.addEventListener("mouseup", function (e) {
+                    findxy('up', e)
+                }, false);
+                canvas.addEventListener("mouseout", function (e) {
+                    findxy('out', e)
+                }, false);
+            }
 
-            document.querySelector('#draw-canvas').addEventListener("mouseup", function(e){
-                document.querySelector('#draw-canvas').onmousemove = null
-            });
-
-            document.querySelector('#draw-canvas').ontouchstart = function(e) {
-                cord_touch(e, "start")
-            };
-            
-            document.querySelector('#draw-canvas').ontouchmove = function(e) {
-                cord_touch(e, "end"); 
-                capture_draw(); 
-                cord_pass_down()
-            };
-            
             document.querySelector('#draw-clear').onclick = function(){
                 clear_draw()
             };
-        }
 
+            function color(obj) {
+                switch (obj.id) {
+                    case "green":
+                        x = "green";
+                        break;
+                    case "blue":
+                        x = "blue";
+                        break;
+                    case "red":
+                        x = "red";
+                        break;
+                    case "yellow":
+                        x = "yellow";
+                        break;
+                    case "black":
+                        x = "black";
+                        break;
+                    case "white":
+                        x = "white";
+                        break;
+                }
+                if (x == "white") y = 20;
+                else y = 2;
+            
+            }
+            
+            function draw() {
+                ctx.beginPath();
+                ctx.moveTo(prevX, prevY);
+                ctx.lineTo(currX, currY);
+                ctx.strokeStyle = x;
+                ctx.lineWidth = y;
+                ctx.stroke();
+                ctx.closePath();
+
+                drawSocket.send(JSON.stringify({
+                    'color': x,
+                    'width': y,
+                    'x1': prevX,
+                    'y1': prevY,
+                    'x2': currX,
+                    'y2': currY
+                }));               
+            }
+            
+            function erase() {
+                var m = confirm("Want to clear");
+                if (m) {
+                    ctx.clearRect(0, 0, w, h);
+                    document.getElementById("canvasimg").style.display = "none";
+                }
+            }
+
+            function findxy(res, e) {
+                if (res == 'down') {
+                    prevX = currX;
+                    prevY = currY;
+                    currX = e.clientX - canvas.offsetLeft;
+                    currY = e.clientY - canvas.offsetTop;
+            
+                    flag = true;
+                    dot_flag = true;
+
+                    if (dot_flag) {
+                        ctx.beginPath();
+                        ctx.fillStyle = x;
+                        ctx.fillRect(currX, currY, 2, 2);
+                        ctx.closePath();
+                        dot_flag = false;
+
+                        drawSocket.send(JSON.stringify({
+                            'color': x,
+                            'width': 2,
+                            'x1': prevX,
+                            'y1': prevY,
+                            'x2': 2,
+                            'y2': 2
+                        }));
+                    }
+                }
+                if (res == 'up' || res == "out") {
+                    flag = false;
+                }
+                if (res == 'move') {
+                    if (flag) {
+                        prevX = currX;
+                        prevY = currY;
+                        currX = e.clientX - canvas.offsetLeft;
+                        currY = e.clientY - canvas.offsetTop;
+
+                        draw();
+                    }
+                }
+            }
+            
+            function clear_draw(){
+                var m = confirm("Want to clear");
+                if (m) {
+                    let our_canvas = document.getElementById("draw-canvas");
+                    let ctx = our_canvas.getContext("2d");
+                    drawSocket.send(JSON.stringify({
+                        'color': x,
+                        'width': y,
+                        'x1': -1,
+                        'y1': -1,
+                        'x2': -1,
+                        'y2': -1
+                    }));
+                    ctx.clearRect(0,0, our_canvas.width, our_canvas.height);
+                }
+            }
+        } else {
+            drawSocket.onmessage = function(e) {
+                let data = JSON.parse(e.data);
+                let color = data['color'];
+                let width = data['width'];
+                let x1 = data['x1'];
+                let y1 = data['y1'];
+                let x2 = data['x2'];
+                let y2 = data['y2'];
+                let our_canvas = document.getElementById("draw-canvas");
+                let ctx = our_canvas.getContext("2d");
+            
+                if(x1 == -1 && x2 == -1 && y1 == -1 && y2 == -1){
+                    ctx.clearRect(0,0, our_canvas.width, our_canvas.height);
+                }
+                if(x2 == 2 && y2 == 2){
+                    ctx.beginPath();
+                    ctx.fillStyle = x;
+                    ctx.fillRect(x1, y1, 2, 2);
+                    ctx.closePath();
+                    dot_flag = false;
+                }else{
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.lineWidth = width;
+                    ctx.strokeStyle = color;
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            };
+        }
         
-
-        function cord_start(e){
-            if (e.pageX || e.pageY) {
-                x1 = e.pageX;
-                y1 = e.pageY;
-            } else {
-                x1 = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-                y1 = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-            }
-            x1 -= document.querySelector('#draw-canvas').offsetLeft;
-            y1 -= document.querySelector('#draw-canvas').offsetTop;
-        }
-
-        function cord_end(){
-            x2 = x1 + 1;
-            y2 = y1 + 1;
-        }
-
-        function cord_touch(e, state){
-            let x,y;
-            if (e.changedTouches[e.changedTouches.length-1].pageX || e.changedTouches[e.changedTouches.length-1].pageY) {
-                x = e.changedTouches[e.changedTouches.length-1].pageX;
-                y = e.changedTouches[e.changedTouches.length-1].pageY;
-            } else {
-                x = e.changedTouches[e.changedTouches.length-1].clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-                y = e.changedTouches[e.changedTouches.length-1].clientY + document.body.scrollTop + document.documentElement.scrollTop;
-            }
-            x -= document.querySelector('#draw-canvas').offsetLeft;
-            y -= document.querySelector('#draw-canvas').offsetTop;
-            if (state === "start"){
-                x1 = x;
-                y1 = y;
-            } else {
-                x2 = x;
-                y2 = y;
-            }
-        }
-
-        function cord_pass_down(){
-            x1 = x2;
-            y1 = y2;
-        }
-
-        function capture_draw(){
-            let drawColor = document.querySelector('#draw-color-select');
-
-            drawSocket.send(JSON.stringify({
-                'color': drawColor.value,
-                'x1': x1,
-                'y1': y1,
-                'x2': x2,
-                'y2': y2
-            }));
-        }
-
-        function clear_draw(){
-            let our_canvas = document.getElementById("draw-canvas");
-            let ctx = our_canvas.getContext("2d");
-
-            ctx.clearRect(0,0, our_canvas.width, our_canvas.height);
-        }
-
     </script>
     
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>

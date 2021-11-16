@@ -28,16 +28,19 @@ class DrawConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         color = text_data_json['color']
+        width = text_data_json['width']
         x1 = text_data_json['x1']
         y1 = text_data_json['y1']
         x2 = text_data_json['x2']
         y2 = text_data_json['y2']
+        # print(text_data_json)
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'drawshare_message',
                 'color': color,
+                'width': width,
                 'x1': x1,
                 'y1': y1,
                 'x2': x2,
@@ -47,6 +50,7 @@ class DrawConsumer(AsyncWebsocketConsumer):
 
     async def drawshare_message(self, event):
         color = event['color']
+        width = event['width']
         x1 = event['x1']
         y1 = event['y1']
         x2 = event['x2']
@@ -55,6 +59,7 @@ class DrawConsumer(AsyncWebsocketConsumer):
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'color': color,
+            'width': width,
             'x1': x1,
             'y1': y1,
             'x2': x2,

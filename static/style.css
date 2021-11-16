@@ -28,6 +28,7 @@ body {
 #draw-canvas{
     display: block;
     cursor: crosshair;
+    
 }
 
 #draw-color-select{
