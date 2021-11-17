@@ -28,7 +28,7 @@
                 <div class="p-6 bg-gray-100 rounded-lg">
                     <div class="flex justify-between items-center mb-3">
                         <div class="font-semibold ">{{ classroom.name }}</div>
-                        <div class="text-gray-500 text-xs">{{ classroom.timestamp }}</div>
+                        <div class="text-gray-500 text-xs">{{ classroom.timestamp|date }}</div>
                     </div>
                     <hr class="mb-3">
                     <div class="mb-1 text-sm">Code: {{ classroom.slug }}</div>
