@@ -45,7 +45,7 @@
                     </div>
                 {% endif %}    
                 <div class="flex h-full items-center justify-center rounded-lg" id="board">
-                    <canvas id="draw-canvas" height="1000" width="1600"></canvas>
+                    <canvas id="draw-canvas"></canvas>
                 </div>
             </div>
             <div class="class-details h-16 bg-gray-200 flex justify-center rounded-lg items-center">
@@ -145,13 +145,24 @@
         let teacher = "{{ classroom.created_by }}";
         let user = "{{ request.user }}";
 
-
+        window.addEventListener('resize', function(){
+            canvas.width = 78 * window.innerWidth / 100;
+            canvas.height = 85 * window.innerHeight / 100 || 766;
+            canvas.style.width = 78 * window.innerWidth / 100;
+            canvas.style.height = 85 * window.innerHeight / 100 || 766;
+        });
 
         if(teacher === user){
             
             window.onload = function() {
                 canvas = document.getElementById("draw-canvas");
                 ctx = canvas.getContext("2d");
+                
+                canvas.width = 78 * window.innerWidth / 100;
+                canvas.height = 85 * window.innerHeight / 100 || 766;
+                canvas.style.width = 78 * window.innerWidth / 100;
+                canvas.style.height = 85 * window.innerHeight / 100 || 766;
+
                 w = canvas.width;
                 h = canvas.height;
             
