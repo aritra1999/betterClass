@@ -14,20 +14,20 @@ chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     if(data.meta == 'new_message'){
         document.querySelector('#chat-log').innerHTML += `
-        <div class="message bg-white rounded-md shadow-md m-2 px-4 py-3">
+        <div class="message px-4 py-2">
             <div class="flex justify-between">
-                <div class="text-gray-400 text-xs">
+                <div class="text-gray-600 text-xs mb-0.5">
                     <small>
                     ` + data.username + `
                     </small>
                 </div>
-                <div class="text-gray-400 text-xs">
+                <div class="text-gray-400 text-xs ">
                     <small>
                     ` + getTime() + `
                     </small>
                 </div>
             </div>
-            <div class="mb-1 mt-2">
+            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-gray-200 max-w-max">
                 ` + data.message + `   
             </div>
         </div>
