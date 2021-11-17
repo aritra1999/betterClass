@@ -14,21 +14,27 @@ chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     if(data.meta == 'new_message'){
         document.querySelector('#chat-log').innerHTML += `
-        <div class="message border-b border-gray-300 m-2 px-2 py-3">
-            <div class="text-xs mb-2 flex justify-between">
-                <div class="text-gray-700 font-bold">
+        <div class="message bg-white rounded-md shadow-md m-2 px-4 py-3">
+            <div class="flex justify-between">
+                <div class="text-gray-400 text-xs">
+                    <small>
                     ` + data.username + `
+                    </small>
                 </div>
-                <div class="text-gray-500">
+                <div class="text-gray-400 text-xs">
+                    <small>
                     ` + getTime() + `
+                    </small>
                 </div>
             </div>
-            ` + data.message + `   
+            <div class="mb-1 mt-2">
+                ` + data.message + `   
+            </div>
         </div>
         `;
     }else if(data.meta == 'new_user'){
         document.querySelector('#chat-log').innerHTML += `
-        <div class=" border-b border-gray-300 m-2 px-2 pb-3 text-green-500 font-bold">
+        <div class="m-2 px-2 text-green-500 text-sm">
             ` + data.new_user + ` has joined the classroom.  
         </div>
         `;
@@ -46,7 +52,7 @@ chatSocket.onmessage = function (e) {
 
         document.querySelector('#user-count').innerHTML = parseInt(document.querySelector('#user-count').innerHTML) - 1;
         document.querySelector('#chat-log').innerHTML += `
-        <div class="border-b border-gray-300 m-2 px-2 pb-3 text-red-500 font-bold">
+        <div class=" m-2 px-2 text-red-500 text-sm">
             ` + data.new_user + ` has left the classroom.  
         </div>
         `;

@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="chat flex w-1/5 h-screen flex-col pt-4 pb-4 pr-4" x-data="setup()">
-            <div class="max-h-16 bg-gray-200 flex justify-center rounded-lg items-center mb-4">
+            <div class="max-h-16 bg-gray-100 flex justify-center rounded-lg items-center mb-4">
                 <ul class="flex justify-center items-center ">
                     <template x-for="(tab, index) in tabs" :key="index">
                         <li class="cursor-pointer py-2 px-2 text-gray-500 text-sm border-b-2"
@@ -91,18 +91,26 @@
             </div>
             <div x-show="activeTab===0" class="relative h-full bg-gray-100 rounded-lg">
                 <div class="bg-gray-100 rounded-lg">
-                    <div class="message overflow-y-scroll text-sm" style="height: 87vh;" id="chat-log">
+                    <div class="message overflow-y-scroll text-sm pb-6" style="height: 87vh;" id="chat-log">
                         {% for message in messages %}
-                        <div class="message border-b border-gray-300 m-2 px-2 py-3">
-                            <div class="mb-2 flex justify-between">
-                                <div class="text-gray-600 text-xs font-bold">
-                                    {{ message.sent_by }}
+                        <div class="message px-4 py-2">
+                            <div class="flex justify-between">
+                                <div class="text-gray-600 text-xs mb-0.5">
+                                    <small>
+                                        {{ message.sent_by }}
+                                    </small>
                                 </div>
-                                <div class="text-gray-500 text-xs">
-                                    {{ message.timestamp }}
+                                <div class="text-gray-400 text-xs ">
+                                    <small>
+                                        {{ message.timestamp }}
+                                    </small>
                                 </div>
                             </div>
-                            {{ message.message }}
+                            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-gray-200 max-w-max">
+                                {{ message.message }}
+                                
+                            </div>
+                            
                         </div>
                         {% endfor %}
                     </div>
@@ -123,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            <div x-show="activeTab===1" class="h-full bg-gray-200 p-2 rounded-lg overflow-y-scroll" id="participants">
+            <div x-show="activeTab===1" class="h-full bg-gray-100 p-2 rounded-lg overflow-y-scroll" id="participants">
                 
             </div>
         </div>
