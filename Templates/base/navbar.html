@@ -33,9 +33,13 @@
 
                             <div x-show="createClass" class="absolute right-0 mt-2 p-4 w-auto bg-white rounded-md shadow-xl z-20">
                                 <form action="" method="POST">{% csrf_token %}
-                                    <div class="flex space-x-4">
+                                    <div class="flex flex-col space-y-4">
                                         <input type="text" name="classname" placeholder="Classroom Name" class="p-3 w-96 bg-gray-100 rounded-lg border focus:border-gray-200"  required/>
-                                        <button type="submit" class="px-3 py-2 flex  justify-center items-center bg-blue-700 hover:bg-blue-800 text-white rounded-lg">
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" class="form-checkbox" name="oneway"/>
+                                            <span class="ml-2">One way classroom?</span>
+                                        </label>
+                                        <button type="submit" class="px-4 py-2 ml-auto flex w-max justify-center items-center bg-blue-700 hover:bg-blue-800 text-white rounded-lg">
                                             Create  
                                         </button>
                                     </div>

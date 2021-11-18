@@ -9,8 +9,11 @@ def home_view(request):
 
     if request.user.is_authenticated:
         if request.method == "POST":
+            oneway = True if request.POST.get('oneway') == 'on' else False
+
             classroom = Classroom.objects.create(
                 name = request.POST.get('classname'),
+                oneway = oneway,
                 created_by = request.user,
             )
 
