@@ -6,6 +6,7 @@ class Classroom(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="teacher")
     slug = models.SlugField(max_length=11, blank=True, null=True)
+    oneway = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
