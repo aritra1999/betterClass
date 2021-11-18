@@ -48,7 +48,7 @@
                     <canvas id="draw-canvas"></canvas>
                 </div>
             </div>
-            <div class="class-details h-16 bg-gray-200 flex justify-center rounded-lg items-center">
+            <div class="class-details h-16 bg-gray-100 flex justify-center rounded-lg items-center">
                 <div class="flex w-full p-2 justify-between">
                     <div class="p-3 flex items-center" x-data="{ tooltip: false }"> 
                         {{ classroom.name }} 
@@ -60,7 +60,7 @@
                         </svg>
                         <div x-show="tooltip" @click="tooltip = false" class="fixed inset-0 h-full w-full z-10"></div>
                         <div class="relative" x-cloak x-show.transition.origin.top="tooltip">
-                            <div class="absolute top-0 z-10 text-gray-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
+                            <div class="absolute top-0 z-10 shadow-md text-gray-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
                                 <span class="font-bold text-black"> Class name: </span>  {{ classroom.name }} <br>
                                 <span class="font-bold text-black"> Class ID: </span>  {{ classroom.slug }} <br>
                                 <span class="font-bold text-black"> Created by: </span>{{ classroom.created_by.first_name }} {{ classroom.created_by.last_name }}, {{ classroom.created_by }} <br>
@@ -69,8 +69,9 @@
                         </div>
                     </div>
                     <div class="flex items-center justify-center space-x-4">
-                        <a type="button" href="{% url 'home' %}" class="w-10 h-10 p-2 flex justify-center items-center bg-red-500 hover:bg-red-700 rounded-full text-white text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a type="button" href="{% url 'home' %}" class="p-3 flex justify-center items-center bg-red-500 hover:bg-red-700 rounded-lg text-white text-sm font-bold">
+                            Leave Class
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
                             </svg>
                         </a>
@@ -106,7 +107,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-gray-200 max-w-max">
+                            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-blue-600 text-white max-w-max">
                                 {{ message.message }}
                                 
                             </div>
@@ -119,9 +120,9 @@
                     <div class="flex  p-2">
                         <input type="text" id="chat-message-input" name="message" placeholder="Eneter message" class="p-3 w-auto bg-transparent w-full text-sm" />
                         <button id="chat-message-submit"
-                            class="w-40 flex justify-center items-center bg-blue-700 rounded-lg text-white text-sm">
+                            class="w-28 flex justify-center items-center bg-blue-700 rounded-lg text-white text-sm">
                             Send
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M14 5l7 7m0 0l-7 7m7-7H3" />

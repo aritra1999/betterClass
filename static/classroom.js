@@ -27,11 +27,13 @@ chatSocket.onmessage = function (e) {
                     </small>
                 </div>
             </div>
-            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-gray-200 max-w-max">
+            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-blue-600 text-white max-w-max">
                 ` + data.message + `   
             </div>
         </div>
         `;
+        var elem = document.getElementById('chat-log');
+        elem.scrollTop = elem.scrollHeight;
     }else if(data.meta == 'new_user'){
         document.querySelector('#chat-log').innerHTML += `
         <div class="m-2 px-2 text-green-500 text-sm">
