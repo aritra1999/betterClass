@@ -1,6 +1,6 @@
 html,
 body {
-    /* font-family: 'Inter', sans-serif !important; */
+    font-family: 'Inter', sans-serif !important;
     font-family: 'DM Sans', sans-serif;
     scroll-behavior: smooth;
 }

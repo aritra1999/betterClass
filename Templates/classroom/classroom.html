@@ -7,33 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
-    <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script>
+    <!-- <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <title>BetterClass | {{ title }}</title>
 </head>
-
 <body>
     <div class="max-w-screen max-h-screen flex">
         <div class="flex flex-col w-4/5 h-screen p-4">
             <div class="message-area h-full mb-4 relative">
                 {% if classroom.created_by == request.user or not classroom.oneway %}
-                    <div class="absolute w-auto h-12 bg-gray-200 rounded-lg left-0 flex justify-center items-center px-2">
+                    <div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-0 flex justify-center items-center px-2" id="toolbar">
                         <div class="flex">
+                            <!-- <div class="mr-3 cursor-move" id="toolbarheader">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify text-slate-400 iconify--ion" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512"><path fill="currentColor" d="M104 160a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56ZM104 312a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56ZM104 464a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Zm152 0a56 56 0 1 1 56-56a56.06 56.06 0 0 1-56 56Z"></path></svg>
+                            </div> -->
                             <div class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" id="white" onclick="color(this)">
-                                Eraser
-                                <svg class="ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="currentColor" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z"/></svg>
+                                <svg class="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="currentColor" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z"/></svg>
                             </div>
-                            <button id="draw-clear" class="h-8 bg-blue-700 text-white py-1 px-3 rounded-md ml-3">
-                                <div class="flex justify-center items-center">
-                                    Clear Board
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </div>
-                            </button>
                             <div class="flex space-x-4 h-6 my-auto ml-3">
                                 <div class="h-6 w-6 rounded-full bg-green-500" id="green" onclick="color(this)"></div>
                                 <div class="h-6 w-6 rounded-full bg-blue-500" id="blue" onclick="color(this)"></div>
@@ -41,28 +36,89 @@
                                 <div class="h-6 w-6 rounded-full bg-yellow-200" id="yellow" onclick="color(this)"></div>
                                 <div class="h-6 w-6 rounded-full bg-black" id="black" onclick="color(this)"></div>                    
                             </div>
+                            <button id="draw-clear" class="h-8 text-slate-600 py-1 px-3 ml-3 w-auto border-l-2 border-slate-300">
+                                <div class="flex justify-center items-center">
+                                    Clear Board
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </div>
+                            </button>   
+                            <button class="h-8 text-slate-600 py-1 px-3 w-auto border-l-2 border-slate-300" onclick="exportBoard()">
+                                <div class="flex justify-center items-center">
+                                    Export
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                    </svg>
+                                </div>
+                            </button>   
+                            <div class="flex justify-center items-center border-l-2 border-slate-300 text-slate-600 text-sm">
+                                <button class="px-3 hover:text-blue-400" onclick="previousPage()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                1 / 1
+                                <button class="px-3 hover:text-blue-400" onclick="nextPage()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                      </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                {% endif %}    
+                {% else %}
+                    <div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-0 flex justify-center items-center px-2" id="toolbar">
+                        <button id="draw-export" class="h-8 text-slate-600 py-1 px-3 w-auto">
+                            <div class="flex justify-center items-center">
+                                Export
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                </svg>
+                            </div>
+                        </button>   
+                        <div class="flex justify-center items-center border-l-2 border-slate-300 text-slate-600 text-sm">
+                            <button class="px-3 hover:text-blue-400" onclick="previousPage()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            1 / 1
+                            <button class="px-3 hover:text-blue-400" onclick="nextPage()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                  </svg>
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}  
                 <div class="flex h-full items-center justify-center rounded-lg" id="board">
                     <canvas id="draw-canvas"></canvas>
                 </div>
             </div>
-            <div class="class-details h-16 bg-gray-100 flex justify-center rounded-lg items-center">
+            <div class="class-details h-16 bg-slate-100 flex justify-center rounded-lg items-center">
                 <div class="flex w-full p-2 justify-between">
                     <div class="p-3 flex items-center" x-data="{ tooltip: false }"> 
                         {{ classroom.name }} 
                         <svg x-on:click="tooltip = !tooltip"
-                            xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 text-gray-400" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 text-slate-400" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div x-show="tooltip" @click="tooltip = false" class="fixed inset-0 h-full w-full z-10"></div>
                         <div class="relative" x-cloak x-show.transition.origin.top="tooltip">
-                            <div class="absolute top-0 z-10 shadow-md text-gray-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
+                            <div class="absolute top-0 z-10 shadow-md text-slate-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
+                                <input id="classCode" value="{{ classroom.slug }}" class="invisible"/>
+                                <div class="flex items-center">
+                                    <span class="font-bold text-black"> Class ID: </span> {{ classroom.slug }} 
+                                    <button class="bg-transparent p-2" onclick="copyClassCode()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </button>
+                                </div>
                                 <span class="font-bold text-black"> Class name: </span>  {{ classroom.name }} <br>
-                                <span class="font-bold text-black"> Class ID: </span>  {{ classroom.slug }} <br>
                                 <span class="font-bold text-black"> Created by: </span>{{ classroom.created_by.first_name }} {{ classroom.created_by.last_name }}, {{ classroom.created_by }} <br>
                                 <span class="font-bold text-black"> Created on: </span> {{ classroom.timestamp }} <br>
                                 {% if classroom.oneway %}
@@ -85,43 +141,35 @@
             </div>
         </div>
         <div class="chat flex w-1/5 h-screen flex-col pt-4 pb-4 pr-4" x-data="setup()">
-            <div class="max-h-16 bg-gray-100 flex justify-center rounded-lg items-center mb-4">
+            <div class="max-h-16 bg-slate-100 flex justify-center rounded-lg items-center mb-4">
                 <ul class="flex justify-center items-center ">
                     <template x-for="(tab, index) in tabs" :key="index">
-                        <li class="cursor-pointer py-2 px-2 text-gray-500 text-sm border-b-2"
+                        <li class="cursor-pointer py-2 px-2 text-slate-500 text-sm border-b-2"
                             :class="activeTab===index ? 'text-blue-700 text-sm border-blue-700' : ''" @click="activeTab = index"
                             x-text="tab"></li>
                     </template>
                     <span class="px-2 pb-0.5 pt-1 bg-black text-white rounded-lg text-xs" id="user-count"></span>
                 </ul>
             </div>
-            <div x-show="activeTab===0" class="relative h-full bg-gray-100 rounded-lg">
-                <div class="bg-gray-100 rounded-lg">
+            <div x-show="activeTab===0" class="relative h-full bg-slate-100 rounded-lg">
+                <div class="bg-slate-100 rounded-lg">
                     <div class="message overflow-y-scroll text-sm pb-20" style="height: 87vh;" id="chat-log">
                         {% for message in messages %}
                         <div class="message px-4 py-2">
                             <div class="flex justify-between">
-                                <div class="text-gray-600 text-xs mb-0.5">
-                                    <small>
-                                        {{ message.sent_by }}
-                                    </small>
+                                <div class="text-slate-600 text-xs mb-0.5">
+                                    <small>{{ message.sent_by }}</small>
                                 </div>
-                                <div class="text-gray-400 text-xs ">
-                                    <small>
-                                        {{ message.timestamp }}
-                                    </small>
+                                <div class="text-slate-400 text-xs ">
+                                    <small>{{ message.timestamp }}</small>
                                 </div>
                             </div>
-                            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-blue-600 text-white max-w-max">
-                                {{ message.message }}
-                                
-                            </div>
-                            
+                            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-blue-600 text-white max-w-max">{{ message.message }}</div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>                
-                <div class="absolute w-full bottom-0 chat-form h-16 bg-gray-200 flex justify-center rounded-b-lg items-center">
+                <div class="absolute w-full bottom-0 chat-form h-16 bg-slate-200 flex justify-center rounded-b-lg items-center">
                     <div class="flex  p-2">
                         <input type="text" id="chat-message-input" name="message" placeholder="Eneter message" class="p-3 w-auto bg-transparent w-full text-sm" />
                         <button id="chat-message-submit"
@@ -132,31 +180,27 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
-                            
                         </button>
                     </div>
                 </div>
             </div>
-            <div x-show="activeTab===1" class="h-full bg-gray-100 p-2 rounded-lg overflow-y-scroll" id="participants">
-                
-            </div>
+            <div x-show="activeTab===1" class="h-full bg-slate-100 p-2 rounded-lg overflow-y-scroll" id="participants"></div>
         </div>
-
     </div>
-
-
 
     {{ classroom.slug|json_script:"room-name" }}
     {{ request.user.username|json_script:"user-name" }}
     {{ classroom.created_by.username|json_script:"teacher" }}
+    {{ classroom.board|json_script:"boardJSONString" }}
 
+    <script src="{% static 'board.js' %}"></script>
     <script src="{% static 'classroom.js' %}"></script>
     {% if classroom.oneway is True %}
         <script src="{% static 'onedraw.js' %}"></script>
     {% else %}
         <script src="{% static 'bothdraw.js' %}"></script>
     {% endif %}
-    
+
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
 </body>

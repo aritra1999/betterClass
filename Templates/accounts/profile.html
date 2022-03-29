@@ -6,23 +6,27 @@
 
 <div>
     <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Profile</h1>
-        <div class="w-full bg-gray-100 rounded-lg p-8">
-            Email: {{ request.user.email }} <br>
-            Name: {{ request.user.first_name }} {{ request.user.last_name }}
+        <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Profile</h1>
+        <div class="flex w-full bg-slate-100 rounded-lg p-8" >
+            <div class="mr-12">
+                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user }}" class="h-20 lg:h-40 w-auto rounded-full ml-4 object-cover" draggable="false" />
+            </div>
+            <div>
+                Email: {{ request.user.email }} <br>
+                Name: {{ request.user.first_name }} {{ request.user.last_name }}
+            </div>
         </div>
     </div>
-    <h1 class="text-2xl font-extrabold text-gray-900 mb-2">Classes you've created</h1>
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-2">Classes you've created</h1>
     <div class="flex flex-wrap my-8 w-full">
         {% for classroom in classrooms %}
             <div class="w-1/4 p-3">
-                <div class="p-6 bg-gray-100 rounded-lg">
+                <div class="p-6 bg-slate-100 rounded-lg">
                     <div class="flex justify-between items-center mb-3">
                         <div class="font-semibold ">{{ classroom.name }}</div>
-                        <div class="text-gray-500 text-xs">{{ classroom.timestamp }}</div>
+                        <div class="text-slate-500 text-xs">{{ classroom.timestamp }}</div>
                     </div>
                     <div class="mb-1 text-sm">Code: {{ classroom.slug }}</div>
-                    <div class="mb-3 text-sm">Owner: {{ classroom.created_by }}</div>
                     <div class="flex justify-between items-center">
                         <a href="/{{ classroom.slug }}" class="text-blue-700 text-md py-1 rounded-md flex justify-center items-center">
                             Join Class

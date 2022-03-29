@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 
 from home.views import (
@@ -7,7 +7,7 @@ from home.views import (
 )
 
 from accounts.views import signin_view, signup_view, profile_view
-from classroom.views import classroom_view, delete_classroom
+from classroom.views import classroom_view, delete_classroom, sync_board_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,5 +21,11 @@ urlpatterns = [
     path('<classroom_slug>', classroom_view, name='classroom'),
 
     path('delete/<classroom>', delete_classroom, name='delete_class'),
-    path('profile/', profile_view, name='profile')
+    path('profile/', profile_view, name='profile'),
+
+    path('accounts/', include('allauth.urls')),
+    path('logout', LogoutView.as_view(), name='logout'),
+
+
+    path('sync_board/<classroom_slug>', sync_board_view, name='sync_board')
 ]

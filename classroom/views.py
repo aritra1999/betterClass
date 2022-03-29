@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Classroom, Message
 
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
 @login_required
 def classroom_view(request, classroom_slug):
     
@@ -42,6 +46,21 @@ def delete_classroom(request, classroom):
         return redirect('/')
     except:
         return HttpResponse('500 Internal Server Error.')
+
+@csrf_exempt
+def sync_board_view(request, classroom_slug):
+    try: 
+        classroom = Classroom.objects.get(slug=classroom_slug)
+
+        board = json.loads(classroom.board)
+        board[str('page' + request.POST.get('page'))] = request.POST.get('board')
+
+        classroom.board = json.dumps(board)
+        classroom.save()
+
+        return JsonResponse({
+            "message": "Board synced"
+        })
+    except: 
+        return HttpResponse('404 Classroom not found');
     
-
-

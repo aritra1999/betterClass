@@ -56,9 +56,10 @@ def signup_view(request):
 
 @login_required
 def profile_view(request):
-    classrooms = Classroom.objects.filter(created_by=request.user)
+    
     context = {
-        'classrooms': classrooms
+        'title': request.user.first_name + " " + request.user.last_name,
+        'classrooms': Classroom.objects.filter(created_by=request.user)
     }
 
     return render(request, 'accounts/profile.html', context)

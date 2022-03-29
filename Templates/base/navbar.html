@@ -1,3 +1,5 @@
+{% load socialaccount %}
+
 <!-- navbar goes here -->
 <nav class="absolute top-0 w-screen">
     <div class="mx-auto max-w-screen">
@@ -6,7 +8,7 @@
             <div class="flex space-x-4">
                 <!-- logo -->
                 <div>
-                    <a href="{% url 'home' %}" class="flex items-center py-8 px-2 text-gray-700 hover:text-gray-900">
+                    <a href="{% url 'home' %}" class="flex items-center py-8 px-2 text-slate-700 hover:text-slate-900">
                         <svg class="h-6 w-6 mr-1 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,7 +36,7 @@
                             <div x-show="createClass" class="absolute right-0 mt-2 p-4 w-auto bg-white rounded-md shadow-xl z-20">
                                 <form action="" method="POST">{% csrf_token %}
                                     <div class="flex flex-col space-y-4">
-                                        <input type="text" name="classname" placeholder="Classroom Name" class="p-3 w-96 bg-gray-100 rounded-lg border focus:border-gray-200"  required/>
+                                        <input type="text" name="classname" placeholder="Classroom Name" class="p-3 w-96 bg-slate-100 rounded-lg border focus:border-slate-200"  required/>
                                         <label class="inline-flex items-center">
                                             <input type="checkbox" class="form-checkbox" name="oneway"/>
                                             <span class="ml-2">One way classroom?</span>
@@ -51,7 +53,7 @@
                     <div class="flex justify-center">
                         <div x-data="{ dropdownOpen: false }" class="relative my-2">
                             <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 block rounded-md p-2 focus:outline-none">
-                                <svg class="h-5 w-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <svg class="h-5 w-5 text-slate-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </button>
@@ -59,21 +61,34 @@
                             <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
                             <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                                <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-700 hover:text-white">
+                                <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm capitalize text-slate-700 hover:bg-blue-700 hover:text-white">
                                     Profile
                                 </a>
-                                <a href="#" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-700 hover:text-white">
+                                <a href="#" class="block px-4 py-2 text-sm capitalize text-slate-700 hover:bg-blue-700 hover:text-white">
                                     Help
                                 </a>
-                                <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-700 hover:text-white">
+                                <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm capitalize text-slate-700 hover:bg-blue-700 hover:text-white">
                                     Sign Out
                                 </a>
                             </div>
                         </div>
                     </div>
                 {% else %}
-                    <a href="{% url 'signin' %}" class="px-3 py-2 w-48 flex justify-center items-center border-2 border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white rounded-lg mr-4">Signin</a>
-                    <a href="{% url 'signup' %}" class="px-3 py-2 w-48 flex justify-center items-center border-2 border-blue-700 bg-blue-700 hover:bg-blue-800 text-white rounded-lg">Create account</a>
+                    <!-- <a href="{% url 'signin' %}" class="px-3 py-2 w-48 flex justify-center items-center border-2 border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white rounded-lg mr-4">Signin</a>
+                    <a href="{% url 'signup' %}" class="px-3 py-2 w-48 flex justify-center items-center border-2 border-blue-700 bg-blue-700 hover:bg-blue-800 text-white rounded-lg">Create account</a> -->
+                    <form action="{% provider_login_url 'google' %}" method="POST">{% csrf_token %}
+                        <button class="bg-slate-100 text-sm md:text-base font-medium px-4 py-2 outline-none rounded-md" type="submit">
+                            <span class="flex items-center gap-2">
+                                <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M21.9527 11.9943C21.9527 11.2154 21.8828 10.4665 21.753 9.74756H11.4082V13.9963H17.3195C17.0649 15.3693 16.291 16.5326 15.1277 17.3114V20.0674H18.6775C20.7545 18.1552 21.9527 15.3393 21.9527 11.9943Z" fill="#4285F4"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4088 22.7285C14.3745 22.7285 16.8608 21.7449 18.6781 20.0674L15.1284 17.3114C14.1448 17.9705 12.8867 18.3599 11.4088 18.3599C8.54804 18.3599 6.1266 16.4277 5.26287 13.8315H1.59326V16.6774C3.4006 20.2671 7.11515 22.7285 11.4088 22.7285Z" fill="#34A853"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.2622 13.8322C5.04253 13.1731 4.91771 12.4692 4.91771 11.7452C4.91771 11.0213 5.04253 10.3173 5.2622 9.65832V6.8125H1.5926C0.848693 8.29532 0.424316 9.97285 0.424316 11.7452C0.424316 13.5176 0.848693 15.1952 1.5926 16.678L5.2622 13.8322Z" fill="#FBBC05"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4088 5.12981C13.0215 5.12981 14.4693 5.68399 15.6077 6.77239L18.758 3.62203C16.8558 1.84963 14.3695 0.76123 11.4088 0.76123C7.11515 0.76123 3.4006 3.22261 1.59326 6.81234L5.26287 9.65815C6.1266 7.06197 8.54804 5.12981 11.4088 5.12981Z" fill="#EA4335"/>
+                                </svg>
+                                Login with Google
+                            </span>
+                        </button>
+                    </form>
                 {% endif %}
             </div>
 
@@ -93,7 +108,7 @@
 
     <!-- mobile menu -->
     <div class="mobile-menu hidden md:hidden">
-        <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">Classroom</a>
-        <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">About Us</a>
+        <a href="#" class="block py-2 px-4 text-sm hover:bg-slate-200">Classroom</a>
+        <a href="#" class="block py-2 px-4 text-sm hover:bg-slate-200">About Us</a>
     </div>
 </nav>
