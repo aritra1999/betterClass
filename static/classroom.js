@@ -1,5 +1,21 @@
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
-const user_username = JSON.parse(document.getElementById('user-name').textContent);
+const userUsername = JSON.parse(document.getElementById('user-name').textContent);
+const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+
+function setup() {
+    return {
+        activeTab: 0,
+        tabs: [
+            "Messages",
+            "Participants",
+        ]
+    };
+};
+
+function copyClassCode() {
+    navigator.clipboard.writeText(roomName);
+    alert("Classroom code copied: " + roomName);
+}
 
 function getTime(){
     const d = new Date();
@@ -8,8 +24,15 @@ function getTime(){
     return months[d.getMonth()] + ". " + d.getDate() + ", " + d.getFullYear() + ", " + (d.getHours()%12 == 0?12 : d.getHours()) + ":" + d.getMinutes() + " " + ampm;
 }
 
-const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
-
+// Export Board as PNG
+function exportBoard(){
+    var canvas = document.getElementById("draw-canvas");
+    var dataURL = canvas.toDataURL("image/png");
+    var newTab = window.open('about:blank','image from canvas');
+    newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+}
+  
+// Get message
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     if(data.meta == 'new_message'){
@@ -61,82 +84,101 @@ chatSocket.onmessage = function (e) {
     }
 };
 
+// Leave room 
 chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
 
+// Send message
 document.querySelector('#chat-message-submit').onclick = function (e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
     if (message.length > 0) {
         chatSocket.send(JSON.stringify({
             'message': message,
-            'username': user_username,
+            'username': userUsername,
         }));
         messageInputDom.value = '';
     }
 };
 
+let page = 0; 
+// setInterval(function () {
+//     const roomName = JSON.parse(document.getElementById('room-name').textContent);
+//     const canvas = document.getElementById("draw-canvas");    
+//     const data = {
+//         classroom: roomName,
+//         board: canvas.toDataURL(),
+//         page: page
+//     };
+    
+//     const options = {
+//         method: "POST",
+//         headers: {'Content-Type': 'application/json'}, 
+//         body: JSON.stringify(data) 
+//     };
 
-function setup() {
-    return {
-        activeTab: 0,
-        tabs: [
-            "Messages",
-            "Participants",
-        ]
-    };
-};
+//     $.ajax({
+//         method: 'POST',
+//         url: `/sync_board/${roomName}`,
+//         data: data
+//     }).done(
+//         function (data, statuyouts) {
+//             console.log(data);
+//         }
+//     );
+// }, 1000);    
 
-function copyClassCode() {
-    var copyText = document.getElementById("classCode");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); 
+$(document).ready ( function(){
+   const boardJSON = JSON.parse(document.getElementById('boardJSONString').textContent);
+   console.log(boardJSON);
+});
 
-    navigator.clipboard.writeText(copyText.value);
-    alert("Classroom code copied: " + copyText.value);
+
+
+/*
+// Make Toolbar dragable 
+dragElement(document.getElementById("toolbar"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
 
-
-// dragElement(document.getElementById("toolbar"));
-
-// function dragElement(elmnt) {
-//   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-//   if (document.getElementById(elmnt.id + "header")) {
-//     // if present, the header is where you move the DIV from:
-//     document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-//   } else {
-//     // otherwise, move the DIV from anywhere inside the DIV:
-//     elmnt.onmousedown = dragMouseDown;
-//   }
-
-//   function dragMouseDown(e) {
-//     e = e || window.event;
-//     e.preventDefault();
-//     // get the mouse cursor position at startup:
-//     pos3 = e.clientX;
-//     pos4 = e.clientY;
-//     document.onmouseup = closeDragElement;
-//     // call a function whenever the cursor moves:
-//     document.onmousemove = elementDrag;
-//   }
-
-//   function elementDrag(e) {
-//     e = e || window.event;
-//     e.preventDefault();
-//     // calculate the new cursor position:
-//     pos1 = pos3 - e.clientX;
-//     pos2 = pos4 - e.clientY;
-//     pos3 = e.clientX;
-//     pos4 = e.clientY;
-//     // set the element's new position:
-//     elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-//     elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-//   }
-
-//   function closeDragElement() {
-//     // stop moving when mouse button is released:
-//     document.onmouseup = null;
-//     document.onmousemove = null;
-//   }
-// }
+*/

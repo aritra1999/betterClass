@@ -69,7 +69,7 @@
                     </div>
                 {% else %}
                     <div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-0 flex justify-center items-center px-2" id="toolbar">
-                        <button id="draw-export" class="h-8 text-slate-600 py-1 px-3 w-auto">
+                        <button class="h-8 text-slate-600 py-1 px-3 w-auto" onclick="exportBoard()">
                             <div class="flex justify-center items-center">
                                 Export
                                 <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -109,7 +109,6 @@
                         <div x-show="tooltip" @click="tooltip = false" class="fixed inset-0 h-full w-full z-10"></div>
                         <div class="relative" x-cloak x-show.transition.origin.top="tooltip">
                             <div class="absolute top-0 z-10 shadow-md text-slate-600 w-96 p-5 -mt-4 ml-24 text-sm leading-tight transform -translate-x-1/2 -translate-y-full bg-white rounded-lg leading-normal">
-                                <input id="classCode" value="{{ classroom.slug }}" class="invisible"/>
                                 <div class="flex items-center">
                                     <span class="font-bold text-black"> Class ID: </span> {{ classroom.slug }} 
                                     <button class="bg-transparent p-2" onclick="copyClassCode()">
@@ -193,14 +192,12 @@
     {{ classroom.created_by.username|json_script:"teacher" }}
     {{ classroom.board|json_script:"boardJSONString" }}
 
-    <script src="{% static 'board.js' %}"></script>
     <script src="{% static 'classroom.js' %}"></script>
     {% if classroom.oneway is True %}
         <script src="{% static 'onedraw.js' %}"></script>
     {% else %}
-        <script src="{% static 'bothdraw.js' %}"></script>
+        <script src="{% static 'multidraw.js' %}"></script>
     {% endif %}
-
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
 </body>
