@@ -1,5 +1,5 @@
-function initDraw() {   
-    // window.addEventListener('resize', updateCanvas);
+function initDraw() {       
+    window.addEventListener('resize', updateCanvas);
     document.querySelector('#draw-clear').onclick = function () { clearDraw(); }
     
     canvas = document.getElementById("currentCanvas" + currentPage);

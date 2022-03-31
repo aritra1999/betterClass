@@ -23,11 +23,10 @@ function setup() {
 };
 
 function updateCanvas() {
-    let updateCanvasInstance = document.getElementById("currentCanvas" + currentPage);
-    updateCanvasInstance.width = 78 * window.innerWidth / 100;
-    updateCanvasInstance.height = 82 * window.innerHeight / 100 || 766;
-    updateCanvasInstance.style.width = 78 * window.innerWidth / 100;
-    updateCanvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
+    for(let updateCanvasInstance in canvasArray) {  
+        updateCanvasInstance.width = 78 * window.innerWidth / 100;
+        updateCanvasInstance.height = 82 * window.innerHeight / 100 || 766;
+    }
 }
 
 

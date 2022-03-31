@@ -23,7 +23,6 @@ $(document).ready(function () {
         canvasInstance.height = 82 * window.innerHeight / 100 || 766;
         canvasInstance.style.width = 78 * window.innerWidth / 100;
         canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
-        // canvasInstance.id = "page0";
         canvasInstance.id = "currentCanvas0";
         canvasArray.push(canvasInstance);
     } else {
