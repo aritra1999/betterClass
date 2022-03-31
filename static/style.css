@@ -25,10 +25,9 @@ body {
     border-radius: 10px;
 }
 
-#draw-canvas{
+#currentCanvas{
     display: block;
     cursor: crosshair;
-    
 }
 
 #draw-color-select{

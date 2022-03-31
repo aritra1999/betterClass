@@ -1,140 +1,113 @@
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
-const userUsername = JSON.parse(document.getElementById('user-name').textContent);
-const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
-
-function setup() {
-    return {
-        activeTab: 0,
-        tabs: [
-            "Messages",
-            "Participants",
-        ]
-    };
-};
-
 function copyClassCode() {
     navigator.clipboard.writeText(roomName);
     alert("Classroom code copied: " + roomName);
 }
 
-function getTime(){
-    const d = new Date();
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const ampm = d.getHours() >= 12 ? 'pm' : 'am';
-    return months[d.getMonth()] + ". " + d.getDate() + ", " + d.getFullYear() + ", " + (d.getHours()%12 == 0?12 : d.getHours()) + ":" + d.getMinutes() + " " + ampm;
-}
-
-// Export Board as PNG
-function exportBoard(){
-    var canvas = document.getElementById("draw-canvas");
+function exportBoard() {
+    var canvas = document.getElementById("currentCanvas");
     var dataURL = canvas.toDataURL("image/png");
-    var newTab = window.open('about:blank','image from canvas');
+    var newTab = window.open('about:blank', 'image from canvas');
     newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
 }
-  
-// Get message
-chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    if(data.meta == 'new_message'){
-        document.querySelector('#chat-log').innerHTML += `
-        <div class="message px-4 py-2">
-            <div class="flex justify-between">
-                <div class="text-slate-600 text-xs mb-0.5">
-                    <small>
-                    ` + data.username + `
-                    </small>
-                </div>
-                <div class="text-slate-400 text-xs ">
-                    <small>
-                    ` + getTime() + `
-                    </small>
-                </div>
-            </div>
-            <div class="py-2 px-4 rounded-bl-lg rounded-br-lg rounded-tr-lg  bg-blue-600 text-white max-w-max">
-                ` + data.message + `   
-            </div>
-        </div>
-        `;
-        var elem = document.getElementById('chat-log');
-        elem.scrollTop = elem.scrollHeight;
-    }else if(data.meta == 'new_user'){
-        document.querySelector('#chat-log').innerHTML += `
-        <div class="m-2 px-2 text-green-500 text-sm">
-            ` + data.new_user + ` has joined the classroom.  
-        </div>
-        `;
-        document.querySelector('#participants').innerHTML = "";
-        for(var user in data.user_list){
-            document.querySelector('#participants').innerHTML += `
-                <div class="py-2 px-4">
-                    ` + data.user_list[user] + `
-                </div>
-            `;
-            
-        }
-        document.querySelector('#user-count').innerHTML = data.user_list.length;
-    }else if(data.meta == 'user_disconnect'){
 
-        document.querySelector('#user-count').innerHTML = parseInt(document.querySelector('#user-count').innerHTML) - 1;
-        document.querySelector('#chat-log').innerHTML += `
-        <div class=" m-2 px-2 text-red-500 text-sm">
-            ` + data.new_user + ` has left the classroom.  
-        </div>
-        `;
-    }
-};
-
-// Leave room 
-chatSocket.onclose = function (e) {
-    console.error('Chat socket closed unexpectedly');
-};
-
-// Send message
-document.querySelector('#chat-message-submit').onclick = function (e) {
-    const messageInputDom = document.querySelector('#chat-message-input');
-    const message = messageInputDom.value;
-    if (message.length > 0) {
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': userUsername,
-        }));
-        messageInputDom.value = '';
-    }
-};
-
-let page = 0; 
-// setInterval(function () {
-//     const roomName = JSON.parse(document.getElementById('room-name').textContent);
-//     const canvas = document.getElementById("draw-canvas");    
-//     const data = {
-//         classroom: roomName,
-//         board: canvas.toDataURL(),
-//         page: page
-//     };
+$(document).ready(function () {
+    const boardJSON = JSON.parse(JSON.parse(document.getElementById('boardJSONString').textContent));
     
-//     const options = {
-//         method: "POST",
-//         headers: {'Content-Type': 'application/json'}, 
-//         body: JSON.stringify(data) 
-//     };
+    totalPage = Object.keys(boardJSON).length;
+    document.getElementById('currentPage').innerHTML = currentPage + 1;
+    document.getElementById('totalPage').innerHTML = totalPage;
 
-//     $.ajax({
-//         method: 'POST',
-//         url: `/sync_board/${roomName}`,
-//         data: data
-//     }).done(
-//         function (data, statuyouts) {
-//             console.log(data);
-//         }
-//     );
-// }, 1000);    
-
-$(document).ready ( function(){
-   const boardJSON = JSON.parse(document.getElementById('boardJSONString').textContent);
-   console.log(boardJSON);
+    if(totalPage == 0){
+        let canvasInstance = document.createElement("CANVAS");
+        canvasInstance.width = 78 * window.innerWidth / 100;
+        canvasInstance.height = 82 * window.innerHeight / 100 || 766;
+        canvasInstance.style.width = 78 * window.innerWidth / 100;
+        canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
+        // canvasInstance.id = "page0";
+        canvasInstance.id = "currentCanvas0";
+        canvasArray.push(canvasInstance);
+    } else {
+        let pageNumberInstance = 0; 
+        Object.entries(boardJSON).map(([pageName, dataURL]) => {
+            let canvasInstance = document.createElement("CANVAS");
+            let ctx = canvasInstance.getContext('2d');
+            canvasInstance.width = 78 * window.innerWidth / 100;
+            canvasInstance.height = 82 * window.innerHeight / 100 || 766;
+            canvasInstance.style.width = 78 * window.innerWidth / 100;
+            canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
+            // canvasInstance.id = "page" + pageNumberInstance; pageNumberInstance++;
+            canvasInstance.id = "currentCanvas" + pageNumberInstance; pageNumberInstance++;
+            var img = new Image;
+            img.onload = function(){
+                ctx.drawImage(img,0,0); 
+            };
+            img.src = dataURL;
+            canvasArray.push(canvasInstance);
+        });
+    }
+    document.getElementById('board').appendChild(canvasArray[currentPage]);
+    initDraw();
 });
 
+function previousPage() {
+    if(currentPage >= 1){
+        currentPage--;
+        document.getElementById('currentPage').innerHTML = currentPage + 1;
+        document.getElementById('board').removeChild(document.getElementById('board').firstChild);
+        document.getElementById('board').appendChild(canvasArray[currentPage]);
+        initDraw();
+        syncBoard();
+    }
+}
 
+function nextPage() {
+    if(currentPage + 1 < totalPage){
+        currentPage++;
+        document.getElementById('currentPage').innerHTML = currentPage + 1;
+        document.getElementById('board').removeChild(document.getElementById('board').firstChild);
+        document.getElementById('board').appendChild(canvasArray[currentPage]);
+        initDraw();
+        syncBoard();
+    }
+}
+
+function syncBoard() {
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const canvas = document.getElementById("currentCanvas" + currentPage);    
+    const data = {
+        classroom: roomName,
+        board: canvas.toDataURL(),
+        page: currentPage
+    };
+
+    $.ajax({ method: 'POST', url: `/sync_board/${roomName}`, data: data }).done(
+        function (data, statuyouts) {
+            console.log(data, statuyouts);
+        }
+    );
+}
+
+function addPage() {
+    totalPage++;
+    currentPage = totalPage - 1;        
+    document.getElementById('totalPage').innerHTML = totalPage;
+    document.getElementById('currentPage').innerHTML =  totalPage;
+
+    let canvasInstance = document.createElement("CANVAS");
+    canvasInstance.width = 78 * window.innerWidth / 100;
+    canvasInstance.height = 82 * window.innerHeight / 100 || 766;
+    canvasInstance.style.width = 78 * window.innerWidth / 100;
+    canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
+    canvasInstance.id = "currentCanvas" + (totalPage - 1);
+    canvasArray.push(canvasInstance);
+
+    document.getElementById('board').removeChild(document.getElementById('board').firstChild);
+    document.getElementById('board').appendChild(canvasArray[totalPage - 1]);
+    initDraw();
+    syncBoard();
+}
+
+setInterval( syncBoard, 5000);
 
 /*
 // Make Toolbar dragable 
