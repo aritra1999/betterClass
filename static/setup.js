@@ -17,7 +17,8 @@ function setup() {
         activeTab: 0,
         tabs: [
             "Messages",
-            "Participants",
+            "Notes",
+            "Participants"  
         ]
     };
 };

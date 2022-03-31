@@ -1,3 +1,4 @@
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 from MajorProject.utils import slug_generator
@@ -28,6 +29,13 @@ class Message(models.Model):
     def __str__(self):
         return str(self.message)
 
+class Notes(models.Model):
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, null=True, blank=True)
+    note = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self): 
+        return self.user 
 
 class Connection(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
@@ -37,3 +45,5 @@ class Connection(models.Model):
 
     def __str__(self):
         return self.user 
+
+

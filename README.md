@@ -27,3 +27,4 @@ Start dev server `python manage.py runserver`
 5. Google authentication
 8. Share board snapshot
 9. Canvas board adding
+10. Adding Notes

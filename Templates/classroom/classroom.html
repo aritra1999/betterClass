@@ -11,68 +11,66 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
-    <!-- <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
     <title>BetterClass | {{ title }}</title>
 </head>
-<body>
+<body>  
     <div class="max-w-screen max-h-screen flex">
         <div class="flex flex-col w-4/5 h-screen p-4">
             <div class="message-area h-full mb-4 relative"> 
-                    <div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-0 flex justify-center items-center px-2" id="toolbar">
-                        <div class="flex">
-                            {% if classroom.created_by == request.user or not classroom.oneway %}
-                                <div class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" id="white" onclick="color(this)">
-                                    <svg class="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="currentColor" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z"/></svg>
-                                </div>
-                                <div class="flex space-x-4 h-6 my-auto ml-3">
-                                    <div class="h-6 w-6 rounded-full bg-green-500" id="green" onclick="color(this)"></div>
-                                    <div class="h-6 w-6 rounded-full bg-blue-500" id="blue" onclick="color(this)"></div>
-                                    <div class="h-6 w-6 rounded-full bg-red-500" id="red" onclick="color(this)"></div>
-                                    <div class="h-6 w-6 rounded-full bg-yellow-200" id="yellow" onclick="color(this)"></div>
-                                    <div class="h-6 w-6 rounded-full bg-black" id="black" onclick="color(this)"></div>                    
-                                </div>
-                                <button id="draw-clear" class="h-8 text-slate-600 py-1 px-3 ml-3 w-auto border-l-2 border-slate-300">
-                                    <div class="flex justify-center items-center">
-                                        Clear Board
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </div>
-                                </button>   
-                            {% endif %}  
-                            <button class="h-8 text-slate-600 py-1 px-3 w-auto {% if classroom.created_by == request.user or not classroom.oneway %} border-l-2 border-slate-300 {% endif %}" onclick="exportBoard()">
+                 <div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-0 flex justify-center items-center px-2" id="toolbar">
+                    <div class="flex">
+                        {% if classroom.created_by == request.user or not classroom.oneway %}
+                            <div class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" id="white" onclick="color(this)">
+                                <svg class="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="currentColor" clip-rule="evenodd"><path d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z"/></svg>
+                            </div>
+                            <div class="flex space-x-4 h-6 my-auto ml-3">
+                                <div class="h-6 w-6 rounded-full bg-green-500" id="green" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-blue-500" id="blue" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-red-500" id="red" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-yellow-200" id="yellow" onclick="color(this)"></div>
+                                <div class="h-6 w-6 rounded-full bg-black" id="black" onclick="color(this)"></div>                    
+                            </div>
+                            <button id="draw-clear" class="h-8 text-slate-600 py-1 px-3 ml-3 w-auto border-l-2 border-slate-300">
                                 <div class="flex justify-center items-center">
-                                    Export
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                    Clear Board
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                 </div>
                             </button>   
-                            <div class="flex justify-center items-center border-l-2 border-slate-300 text-slate-600 text-sm">
-                                <button class="pr-1 pl-3 hover:text-blue-400" onclick="previousPage()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                </button>
-                                <span id="currentPage" class="px-1"></span> / <span id="totalPage" class="px-1"></span>
-                                <button class="pr-3 pl-1 hover:text-blue-400" onclick="nextPage()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                                      </svg>
-                                </button>
+                        {% endif %}  
+                        <button class="h-8 text-slate-600 py-1 px-3 w-auto {% if classroom.created_by == request.user or not classroom.oneway %} border-l-2 border-slate-300 {% endif %}" onclick="exportBoard()">
+                            <div class="flex justify-center items-center">
+                                Export
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                </svg>
                             </div>
-                            <div class="flex justify-center items-center border-l-2 text-sm">
-                                <button class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" onclick="addPage()">
-                                    Add Page 
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </button>   
+                        <div class="flex justify-center items-center border-l-2 border-slate-300 text-slate-600 text-sm">
+                            <button class="pr-1 pl-3 hover:text-blue-400" onclick="previousPage()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <span id="currentPage" class="px-1"></span> / <span id="totalPage" class="px-1"></span>
+                            <button class="pr-3 pl-1 hover:text-blue-400" onclick="nextPage()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                     </svg>
-                                </button>
-                            </div>
+                            </button>
                         </div>
-                    </div>                
+                        <div class="flex justify-center items-center border-l-2 text-sm">
+                            <button class="flex h-8 bg-blue-700 text-white py-1 px-3 rounded-md justify-center items-center" onclick="addPage()">
+                                Add Page 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>                
                 <div class="flex h-full items-center justify-center rounded-lg" id="board"></div>
             </div>
             <div class="class-details h-16 bg-slate-100 flex justify-center rounded-lg items-center">
@@ -162,7 +160,13 @@
                     </div>
                 </div>
             </div>
-            <div x-show="activeTab===1" class="h-full bg-slate-100 p-2 rounded-lg overflow-y-scroll" id="participants"></div>
+            <div x-show="activeTab===1" class="h-full bg-slate-100 p-2 rounded-lg overflow-y-scroll" id="notes">
+                <textarea name="note" id="note" class="h-[calc(100%-64px)] w-full p-4">
+                    {{ note.note }}
+                </textarea>
+                <button class="w-full py-3 flex mt-2 justify-center items-center bg-blue-700 text-white rounded-lg" onclick="saveNote()">Save Note</button>
+            </div>
+            <div x-show="activeTab===2" class="h-full bg-slate-100 p-2 rounded-lg overflow-y-scroll" id="participants"></div>
         </div>
     </div>
 

@@ -71,10 +71,8 @@ function nextPage() {
 }
 
 function syncBoard() {
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const canvas = document.getElementById("currentCanvas" + currentPage);    
     const data = {
-        classroom: roomName,
         board: canvas.toDataURL(),
         page: currentPage
     };
@@ -107,6 +105,22 @@ function addPage() {
 }
 
 setInterval( syncBoard, 5000);
+
+function saveNote() {
+    const note = $("#note").val();    
+    const data = {
+        note: note
+    };
+
+    $.ajax({ method: 'POST', url: `/sync_note/${roomName}`, data: data }).done(
+        function (data, statuyouts) {
+            console.log(data, statuyouts);
+        }
+    );
+}
+
+
+
 
 /*
 // Make Toolbar dragable 

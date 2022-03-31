@@ -7,7 +7,7 @@ from home.views import (
 )
 
 from accounts.views import signin_view, signup_view, profile_view
-from classroom.views import classroom_view, delete_classroom, sync_board_view
+from classroom.views import classroom_view, delete_classroom, sync_board_view, sync_note_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('logout', LogoutView.as_view(), name='logout'),
 
 
-    path('sync_board/<classroom_slug>', sync_board_view, name='sync_board')
+    path('sync_board/<classroom_slug>', sync_board_view, name='sync_board'),
+    path('sync_note/<classroom_slug>', sync_note_view, name='sync_note')
 ]
