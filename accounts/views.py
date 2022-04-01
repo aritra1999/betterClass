@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from classroom.models import Classroom
+from classroom.models import Classroom, Notes
 
 def signin_view(request):
     if request.user.is_authenticated:
@@ -38,7 +38,7 @@ def signup_view(request):
                 user = User.objects.create_user(
                     first_name=request.POST.get('f_name'),
                     last_name=request.POST.get('l_name'),
-                    username=request.POST.get('email'),
+                username=request.POST.get('email'),
                     email=request.POST.get('email'),
                     password=password1
                 )
@@ -56,10 +56,10 @@ def signup_view(request):
 
 @login_required
 def profile_view(request):
-    
     context = {
         'title': request.user.first_name + " " + request.user.last_name,
-        'classrooms': Classroom.objects.filter(created_by=request.user)
+        'classrooms': Classroom.objects.filter(created_by=request.user),
+        'notes': Notes.objects.filter(user=request.user)
     }
 
     return render(request, 'accounts/profile.html', context)

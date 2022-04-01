@@ -43,7 +43,7 @@ $(document).ready(function () {
             canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
             canvasInstance.id = "currentCanvas" + pageNumberInstance; pageNumberInstance++;
 
-            var img = new Image;
+            let img = new Image;
             img.onload = function(){ ctx.drawImage(img,0,0); };
             img.src = dataURL;
             

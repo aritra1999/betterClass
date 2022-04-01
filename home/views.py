@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
-
-from classroom.models import Classroom, Connection
+from classroom.models import Classroom, Connection, Notes
 
 def home_view(request):
     context = {
@@ -19,8 +18,9 @@ def home_view(request):
 
             return redirect('/' + str(classroom.slug))
         classes = Classroom.objects.all()
-
+        notes = Notes.objects.filter(user=request.user)
         context['classrooms'] = classes
+        context['notes'] = notes
     return render(request, 'home/home.html', context)
 
 

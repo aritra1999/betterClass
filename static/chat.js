@@ -5,6 +5,11 @@ function getTime() {
     return months[d.getMonth()] + ". " + d.getDate() + ", " + d.getFullYear() + ", " + (d.getHours() % 12 == 0 ? 12 : d.getHours()) + ":" + d.getMinutes() + " " + ampm;
 }
 
+function kickUser(username) {
+    console.log(username);
+    
+}
+
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     if (data.meta == 'new_message') {
@@ -27,7 +32,7 @@ chatSocket.onmessage = function (e) {
             </div>
         </div>
         `;
-        var elem = document.getElementById('chat-log');
+        let elem = document.getElementById('chat-log');
         elem.scrollTop = elem.scrollHeight;
     } else if (data.meta == 'new_user') {
         document.querySelector('#chat-log').innerHTML += `
@@ -36,17 +41,21 @@ chatSocket.onmessage = function (e) {
         </div>
         `;
         document.querySelector('#participants').innerHTML = "";
-        for (var user in data.user_list) {
-            document.querySelector('#participants').innerHTML += `
-                <div class="py-2 px-4">
-                    ` + data.user_list[user] + `
-                </div>
-            `;
-
+        
+        if(user === teacher) {
+            for (let user in data.user_list) {
+                if(data.user_list[user] != teacher) document.querySelector('#participants').innerHTML += `<div class="py-2 border-b border-slate-200 px-4 flex justify-between w-full">${data.user_list[user]}<button class="bg-red-400 px-2 pt-1 pb-0.5 rounded-full text-white text-sm" onclick="kickUser('${data.user_list[user]}')">Kick</button></div>`;
+                else document.querySelector('#participants').innerHTML += `<div class="py-3 px-4 justify-between w-full border-b border-slate-200">${data.user_list[user]}</div>`;
+            }
         }
+        else {
+            for (let user in data.user_list) {
+                document.querySelector('#participants').innerHTML += `<div class="py-3 px-4 justify-between w-full border-b border-slate-200">${data.user_list[user]}</div>`;
+            }
+        }
+        
         document.querySelector('#user-count').innerHTML = data.user_list.length;
     } else if (data.meta == 'user_disconnect') {
-
         document.querySelector('#user-count').innerHTML = parseInt(document.querySelector('#user-count').innerHTML) - 1;
         document.querySelector('#chat-log').innerHTML += `
         <div class=" m-2 px-2 text-red-500 text-sm">
@@ -56,11 +65,9 @@ chatSocket.onmessage = function (e) {
     }
 };
 
-
 chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
-
 
 document.querySelector('#chat-message-submit').onclick = function (e) {
     const messageInputDom = document.querySelector('#chat-message-input');
@@ -73,3 +80,4 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
         messageInputDom.value = '';
     }
 };
+

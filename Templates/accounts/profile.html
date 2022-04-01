@@ -14,6 +14,17 @@
             <div>
                 Email: {{ request.user.email }} <br>
                 Name: {{ request.user.first_name }} {{ request.user.last_name }}
+                <div class="flex space-x-4 mt-4">
+                    <div class="bg-slate-200 p-3 w-56 flex items-center justify-center rounded-md flex-col">
+                        Classrooms Creared
+                        <h2 class="text-3xl font-bold py-3">{{ classrooms.count }}</h2>
+                        
+                    </div>
+                    <div class="bg-slate-200 p-3 w-56 flex items-center justify-center rounded-md flex-col">
+                        Notes taken
+                        <h2 class="text-3xl font-bold py-3">{{ notes.count }}</h2>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -34,6 +45,36 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                             
+                        </a>
+                        {% if request.user == classroom.created_by %}
+                        <a href="/delete/{{ classroom.slug }}" class="hover:text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-2">Notes you've saved</h1>
+    <div class="flex flex-wrap my-8 w-full">
+        {% for note in notes %}
+            <div class="w-1/4 p-3">
+                <div class="px-6 pt-6 pb-4 bg-slate-100 rounded-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="font-semibold ">{{ note.classroom.name }}</div>
+                        <div class="text-slate-500 text-xs">{{ note.classroom.timestamp|date }}</div>
+                    </div>
+                    <hr class="mb-3">
+                    <div class="text-sm">{{ note.note }}</div>
+                    <div class="flex justify-between items-center">
+                        <a href="/{{ classroom.slug }}" class="text-blue-700 text-md py-1 rounded-md flex justify-center items-center">
+                            View in class
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
                         </a>
                         {% if request.user == classroom.created_by %}
                         <a href="/delete/{{ classroom.slug }}" class="hover:text-red-500">
