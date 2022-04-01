@@ -1,5 +1,5 @@
 function initDraw() {
-    // window.addEventListener('resize', updateCanvas);
+    window.addEventListener('resize', updateCanvas);        
     document.querySelector('#draw-clear').onclick = function () { clearDraw(); }
     
     if (teacher === user) {
@@ -9,20 +9,10 @@ function initDraw() {
         w = canvas.width;
         h = canvas.height;
 
-        canvas.addEventListener("mousemove", function (e) {
-            findxy('move', e)
-        }, false);
-        canvas.addEventListener("mousedown", function (e) {
-            findxy('down', e)
-        }, false);
-        canvas.addEventListener("mouseup", function (e) {
-            findxy('up', e)
-        }, false);
-        canvas.addEventListener("mouseout", function (e) {
-            findxy('out', e)
-        }, false);
-        
-        
+        canvas.addEventListener("mousemove", function (e) { findxy('move', e) }, false);
+        canvas.addEventListener("mousedown", function (e) { findxy('down', e) }, false);
+        canvas.addEventListener("mouseup", function (e) { findxy('up', e) }, false);
+        canvas.addEventListener("mouseout", function (e) { findxy('out', e) }, false);        
         
         function findxy(res, e) {
             if (res == 'down') {
@@ -30,7 +20,6 @@ function initDraw() {
                 prevY = currY;
                 currX = e.clientX - canvas.offsetLeft;
                 currY = e.clientY - canvas.offsetTop;
-
                 flag = true;
                 dot_flag = true;
 
@@ -40,29 +29,16 @@ function initDraw() {
                     ctx.fillRect(currX, currY, 2, 2);
                     ctx.closePath();
                     dot_flag = false;
-
-                    drawSocket.send(JSON.stringify({
-                        'color': x,
-                        'width': 2,
-                        'x1': prevX,
-                        'y1': prevY,
-                        'x2': 2,
-                        'y2': 2
-                    }));
+                    drawSocket.send(JSON.stringify({ 'color': x, 'width': 2, 'x1': prevX, 'y1': prevY, 'x2': 2, 'y2': 2 }));
                 }
             }
-            if (res == 'up' || res == "out") {
-                flag = false;
-            }
-            if (res == 'move') {
-                if (flag) {
-                    prevX = currX;
-                    prevY = currY;
-                    currX = e.clientX - canvas.offsetLeft;
-                    currY = e.clientY - canvas.offsetTop;
-
-                    draw();
-                }
+            if (res == 'up' || res == "out") flag = false;
+            if (res == 'move' && flag) {
+                prevX = currX;
+                prevY = currY;
+                currX = e.clientX - canvas.offsetLeft;
+                currY = e.clientY - canvas.offsetTop;
+                draw();
             }
         }
 
@@ -74,19 +50,9 @@ function initDraw() {
             ctx.lineWidth = y;
             ctx.stroke();
             ctx.closePath();
-        
-            drawSocket.send(JSON.stringify({
-                'color': x,
-                'width': y,
-                'x1': prevX,
-                'y1': prevY,
-                'x2': currX,
-                'y2': currY
-            }));
+            drawSocket.send(JSON.stringify({ 'color': x, 'width': y, 'x1': prevX, 'y1': prevY, 'x2': currX, 'y2': currY }));
         }
-                
     } else {
-        
         drawSocket.onmessage = function (e) {
             let data = JSON.parse(e.data);
             let color = data['color'];
@@ -97,7 +63,6 @@ function initDraw() {
             let y2 = data['y2'];
             let our_canvas = document.getElementById("currentCanvas" + currentPage      );
             let ctx = our_canvas.getContext("2d");
-
 
             if (x1 == -1 && x2 == -1 && y1 == -1 && y2 == -1) {
                 ctx.clearRect(0, 0, our_canvas.width, our_canvas.height);

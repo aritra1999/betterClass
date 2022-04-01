@@ -176,7 +176,7 @@
     {{ classroom.board|json_script:"boardJSONString" }}
 
     <script src="{% static 'setup.js' %}"></script>
-    <script src="{% static 'classroom.js' %}"></script>
+    <script src="{% static 'utils.js' %}"></script>
     <script src="{% static 'chat.js' %}"></script>
     {% if classroom.oneway is True %}
         <script src="{% static 'onedraw.js' %}"></script>

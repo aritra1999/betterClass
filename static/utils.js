@@ -4,49 +4,11 @@ function copyClassCode() {
 }
 
 function exportBoard() {
-    var canvas = document.getElementById("currentCanvas");
-    var dataURL = canvas.toDataURL("image/png");
-    var newTab = window.open('about:blank', 'image from canvas');
+    let canvas = document.getElementById("currentCanvas" + currentPage);
+    let dataURL = canvas.toDataURL("image/png");
+    let newTab = window.open('about:blank/Export Canvas', 'image from canvas');
     newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
 }
-
-$(document).ready(function () {
-    const boardJSON = JSON.parse(JSON.parse(document.getElementById('boardJSONString').textContent));
-    
-    totalPage = Object.keys(boardJSON).length;
-    document.getElementById('currentPage').innerHTML = currentPage + 1;
-    document.getElementById('totalPage').innerHTML = totalPage;
-
-    if(totalPage == 0){
-        let canvasInstance = document.createElement("CANVAS");
-        canvasInstance.width = 78 * window.innerWidth / 100;
-        canvasInstance.height = 82 * window.innerHeight / 100 || 766;
-        canvasInstance.style.width = 78 * window.innerWidth / 100;
-        canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
-        canvasInstance.id = "currentCanvas0";
-        canvasArray.push(canvasInstance);
-    } else {
-        let pageNumberInstance = 0; 
-        Object.entries(boardJSON).map(([pageName, dataURL]) => {
-            let canvasInstance = document.createElement("CANVAS");
-            let ctx = canvasInstance.getContext('2d');
-            canvasInstance.width = 78 * window.innerWidth / 100;
-            canvasInstance.height = 82 * window.innerHeight / 100 || 766;
-            canvasInstance.style.width = 78 * window.innerWidth / 100;
-            canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
-            // canvasInstance.id = "page" + pageNumberInstance; pageNumberInstance++;
-            canvasInstance.id = "currentCanvas" + pageNumberInstance; pageNumberInstance++;
-            var img = new Image;
-            img.onload = function(){
-                ctx.drawImage(img,0,0); 
-            };
-            img.src = dataURL;
-            canvasArray.push(canvasInstance);
-        });
-    }
-    document.getElementById('board').appendChild(canvasArray[currentPage]);
-    initDraw();
-});
 
 function previousPage() {
     if(currentPage >= 1){
@@ -70,20 +32,6 @@ function nextPage() {
     }
 }
 
-function syncBoard() {
-    const canvas = document.getElementById("currentCanvas" + currentPage);    
-    const data = {
-        board: canvas.toDataURL(),
-        page: currentPage
-    };
-
-    $.ajax({ method: 'POST', url: `/sync_board/${roomName}`, data: data }).done(
-        function (data, statuyouts) {
-            console.log(data, statuyouts);
-        }
-    );
-}
-
 function addPage() {
     totalPage++;
     currentPage = totalPage - 1;        
@@ -93,8 +41,6 @@ function addPage() {
     let canvasInstance = document.createElement("CANVAS");
     canvasInstance.width = 78 * window.innerWidth / 100;
     canvasInstance.height = 82 * window.innerHeight / 100 || 766;
-    canvasInstance.style.width = 78 * window.innerWidth / 100;
-    canvasInstance.style.height = 82 * window.innerHeight / 100 || 766;
     canvasInstance.id = "currentCanvas" + (totalPage - 1);
     canvasArray.push(canvasInstance);
 
@@ -104,7 +50,12 @@ function addPage() {
     syncBoard();
 }
 
-setInterval( syncBoard, 5000);
+function updateCanvas() {
+    for(let updateCanvasInstance in canvasArray) {  
+        updateCanvasInstance.width = 78 * window.innerWidth / 100;
+        updateCanvasInstance.height = 82 * window.innerHeight / 100 || 766;
+    }
+}
 
 function saveNote() {
     const note = $("#note").val();    
@@ -119,8 +70,43 @@ function saveNote() {
     );
 }
 
+function syncBoard() {
+    const canvas = document.getElementById("currentCanvas" + currentPage);    
+    const data = {
+        board: canvas.toDataURL(),
+        page: currentPage
+    };
 
+    $.ajax({ method: 'POST', url: `/sync_board/${roomName}`, data: data }).done(
+        function (data, statuyouts) {
+            console.log(data, statuyouts);
+        }
+    );
+}
 
+function clearDraw() {
+    if (confirm("Want to clear")) {
+        let canvasInstance = document.getElementById("currentCanvas" + currentPage);
+        let ctx = canvasInstance.getContext("2d");
+        drawSocket.send(JSON.stringify({ 'color': x, 'width': y, 'x1': -1, 'y1': -1, 'x2': -1, 'y2': -1 }));
+        ctx.clearRect(0, 0, canvasInstance.width, canvasInstance.height);
+    }
+}
+
+function color(obj) {
+    switch (obj.id) {
+        case "green": x = "green"; break;
+        case "blue": x = "blue"; break;
+        case "red": x = "red"; break;
+        case "yellow": x = "yellow"; break;
+        case "black": x = "black"; break;
+        case "white": x = "white"; break;
+    }
+    if (x == "white") y = 20;
+    else y = 2;
+}
+
+setInterval( syncBoard, 5000);
 
 /*
 // Make Toolbar dragable 
