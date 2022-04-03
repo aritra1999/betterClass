@@ -1,4 +1,3 @@
-from mailbox import NotEmptyError
 from channels import consumer
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -8,18 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Classroom, Message, Notes
 import json
 
-
 @login_required
 def classroom_view(request, classroom_slug):
-    try:
-        classroom = Classroom.objects.get(slug=classroom_slug)
-    except:
-        return HttpResponse("Classroom not found")
-
-    try: 
-        note = Notes.objects.get(user=request.user, classroom=classroom)
-    except:
-        note = Notes.objects.create(user=request.user, classroom=classroom)
+    try: classroom = Classroom.objects.get(slug=classroom_slug)
+    except: return HttpResponse("404 Class not found")
+    try: note = Notes.objects.get(user=request.user, classroom=classroom)
+    except: note = Notes.objects.create(user=request.user, classroom=classroom)
         
     context = {
         'classroom': classroom,
@@ -29,13 +22,24 @@ def classroom_view(request, classroom_slug):
     }
     return render(request, 'classroom/classroom.html', context)
 
+@login_required
+def notes_view(request, classroom_slug): 
+    try: classroom = Classroom.objects.get(slug=classroom_slug)
+    except: return HttpResponse("404 Class not found")
+    try: notes = Notes.objects.get(user=request.user, classroom=classroom)
+    except: return HttpResponse("404 No notes found")
+    print(notes.__dict__)
+    context = {
+        'title': 'Notes',
+        'note': notes,
+        'classroom': classroom
+    } 
+    return render(request, 'classroom/notes.html', context)
 
 @login_required
 def disconnect_user(request, classroom):
     Classroom.objects.get(slug=classroom).users.remove(request.user)
-
     return redirect('/')
-
 
 @login_required
 def delete_classroom(request, classroom):
@@ -55,13 +59,9 @@ def sync_board_view(request, classroom_slug):
         classroom = Classroom.objects.get(slug=classroom_slug)
         board = json.loads(classroom.board)
         board[str('page' + request.POST.get('page'))] = request.POST.get('board')
-
         classroom.board = json.dumps(board)
         classroom.save()
-
-        return JsonResponse({
-            "message": "Board synced"
-        })
+        return JsonResponse({"message": "Board synced"})
     except: 
         return HttpResponse('404 Classroom not found');
     
@@ -71,10 +71,7 @@ def sync_note_view(request, classroom_slug):
         note = Notes.objects.get(user=request.user, classroom__slug=classroom_slug)
         note.note = request.POST.get('note')
         note.save()
-
-        return JsonResponse({
-            "message": "Notes synced"
-        })
+        return JsonResponse({"message": "Notes synced"})
     except: 
         return HttpResponse('404 Classroom not found');
     

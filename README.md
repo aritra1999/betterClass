@@ -20,11 +20,12 @@ Start dev server `python manage.py runserver`
 7. Adding shapes
 
 #### In Progress
-3. Kicking student’s
 
 #### Done
+3. Kicking student’s
 4. Copy button for Code.
 5. Google authentication
 8. Share board snapshot
 9. Canvas board adding
 10. Adding Notes
+11. Fix: Remove add page, remove notes section from dashboard, higlight colors, add tooltip on icons

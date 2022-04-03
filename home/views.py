@@ -17,10 +17,22 @@ def home_view(request):
             )
 
             return redirect('/' + str(classroom.slug))
+            
         classes = Classroom.objects.all()
         notes = Notes.objects.filter(user=request.user)
+
+        for classe in classes: 
+            try:
+                notes = Notes.objects.get(user=request.user, classroom=classe)
+                classe.hasNote = True
+            except:
+                classe.hasNote = False
+
+        
+
         context['classrooms'] = classes
         context['notes'] = notes
+
     return render(request, 'home/home.html', context)
 
 

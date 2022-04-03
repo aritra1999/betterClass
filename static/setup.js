@@ -53,3 +53,4 @@ $(document).ready(function () {
     document.getElementById('board').appendChild(canvasArray[currentPage]);
     initDraw();
 });
+

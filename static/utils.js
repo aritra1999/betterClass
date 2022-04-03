@@ -1,3 +1,5 @@
+colors = ["Green", "Red", "Yellow", "White", "Black", "Blue"]
+
 function copyClassCode() {
     navigator.clipboard.writeText(roomName);
     alert("Classroom code copied: " + roomName);
@@ -93,7 +95,16 @@ function clearDraw() {
     }
 }
 
+function setActive(color) {
+    for(let colorInstance in colors){
+        $("#colorContainer" + colors[colorInstance]).removeClass('active');    
+    }
+    
+    $("#colorContainer" + color.charAt(0).toUpperCase() + color.slice(1)).addClass('active');
+}
+
 function setColor(obj) {
+    setActive(obj.id);
     switch (obj.id) {
         case "green": x = "green"; break;
         case "blue": x = "blue"; break;
@@ -105,5 +116,6 @@ function setColor(obj) {
     if (x == "white") y = 20;
     else y = 2;
 }
+
 
 setInterval( syncBoard, 5000);

@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block extraHead %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+{% endblock extraHead %}
+
+{% block content %}
+<div class="absolute z-50 w-100 h-12 bg-slate-100 rounded-lg left-20 flex justify-center items-center px-2" id="toolbar">
+    <div class="flex">
+        <button class="h-8 text-slate-600 py-1 px-3 w-auto" onclick="exportBoard()">
+            <div class="flex justify-center items-center">
+                Export
+                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                </svg>
+            </div>
+        </button>   
+        <div class="flex justify-center items-center border-l-2 border-slate-300 text-slate-600 text-sm">
+            <button class="pr-1 pl-3 hover:text-blue-400" onclick="previousPage()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <span id="currentPage" class="px-1"></span> / <span id="totalPage" class="px-1"></span>
+            <button class="pr-3 pl-1 hover:text-blue-400" onclick="nextPage()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+            </button>
+        </div>      
+    </div>
+</div>          
+<div id="board" class="mx-20 my-2"></div>
+<div class="mx-20">
+    <h1 class="text-2xl underline font-extrabold text-slate-900 mb-2 pt-4 border-t border-slate-100">Note</h1>
+    {{ note.note }}
+</div>
+
+{{ classroom.board|json_script:"boardJSONString" }}
+{% endblock content %}
+
+{% block extraFoot %}
+    <script src="{% static 'notes.js' %}"></script>
+{% endblock extraFoot %}
