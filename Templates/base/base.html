@@ -15,14 +15,19 @@
     {% block extraHead %}{% endblock %}
 </head>
 <body class="overflow-x-hidden">
-    {% include 'base/navbar.html' %}
+    <div class="hidden md:block">
+        {% include 'base/navbar.html' %}
 
-    <div class="container px-5 py-32 mx-auto max-w-screen min-h-screen">
-        {% block content %}{% endblock content %}
+        <div class="container py-32 mx-auto max-w-screen min-h-screen">
+            {% block content %}{% endblock content %}
+        </div>
+
+        {% block extraFoot %}{% endblock extraFoot %}
+        <script src="{% static 'script.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     </div>
-
-    {% block extraFoot %}{% endblock extraFoot %}
-    <script src="{% static 'script.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <div class="md:hidden h-screen flex justify-center items-center font-extrabold text-4xl">
+        Please open this page on a bigger screen!
+    </div>
 </body>
 </html>
