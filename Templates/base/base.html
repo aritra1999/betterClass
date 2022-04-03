@@ -14,9 +14,8 @@
     <title>{{ title }}</title>
     {% block extraHead %}{% endblock %}
 </head>
-<body>
+<body class="overflow-x-hidden">
     {% include 'base/navbar.html' %}
-        
 
     <div class="container px-5 py-32 mx-auto max-w-screen min-h-screen">
         {% block content %}{% endblock content %}
