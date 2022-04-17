@@ -1,10 +1,11 @@
-    {% extends 'base/base.html' %}
+{% extends 'base/base.html' %}
 {% load static %}
 {% block extraHead %}{% endblock extraHead %}
 
 {% block content %}
 
 {% if request.user.is_authenticated %}
+{% load socialaccount %}
 <div class="flex mx-auto justify-center items-center">
     
     <div class="flex space-x-4 my-8">
@@ -79,7 +80,21 @@
         <h1 class="text-4xl font-bold text-slate-900 mb-6">Visualize your ideas in a new and collaborative way.</h1>
         <p class="text-lg font-normal text-slate-600 mb-6">Sketch your ideas whiteboard-style while benefiting from the access and connectivity of an interactive canvas, on mobile, or right from your web browser</p>
         <div>
-            <a href="{% url 'signup' %}" class="text-blue-700 underline">Create an account</a> to join classes.
+            
+            <form action="{% provider_login_url 'google' %}" method="POST">
+                {% csrf_token %}
+                <button class="bg-slate-100 text-sm md:text-base font-medium px-4 py-2 outline-none rounded-md" type="submit">
+                    <span class="flex items-center gap-2">
+                        <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M21.9527 11.9943C21.9527 11.2154 21.8828 10.4665 21.753 9.74756H11.4082V13.9963H17.3195C17.0649 15.3693 16.291 16.5326 15.1277 17.3114V20.0674H18.6775C20.7545 18.1552 21.9527 15.3393 21.9527 11.9943Z" fill="#4285F4"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4088 22.7285C14.3745 22.7285 16.8608 21.7449 18.6781 20.0674L15.1284 17.3114C14.1448 17.9705 12.8867 18.3599 11.4088 18.3599C8.54804 18.3599 6.1266 16.4277 5.26287 13.8315H1.59326V16.6774C3.4006 20.2671 7.11515 22.7285 11.4088 22.7285Z" fill="#34A853"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.2622 13.8322C5.04253 13.1731 4.91771 12.4692 4.91771 11.7452C4.91771 11.0213 5.04253 10.3173 5.2622 9.65832V6.8125H1.5926C0.848693 8.29532 0.424316 9.97285 0.424316 11.7452C0.424316 13.5176 0.848693 15.1952 1.5926 16.678L5.2622 13.8322Z" fill="#FBBC05"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4088 5.12981C13.0215 5.12981 14.4693 5.68399 15.6077 6.77239L18.758 3.62203C16.8558 1.84963 14.3695 0.76123 11.4088 0.76123C7.11515 0.76123 3.4006 3.22261 1.59326 6.81234L5.26287 9.65815C6.1266 7.06197 8.54804 5.12981 11.4088 5.12981Z" fill="#EA4335"/>
+                        </svg>
+                        Login with Google
+                    </span>
+                </button>
+            </form>
         </div>
     </div>
     <div class="flex w-1/2 justify-center -mt-64">

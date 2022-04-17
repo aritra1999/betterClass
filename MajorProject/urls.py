@@ -28,6 +28,7 @@ urlpatterns = [
     path('<classroom_slug>', classroom_view, name='classroom'),
     path('notes/<classroom_slug>', notes_view, name="notes"),
     
+    
     path('profile/', profile_view, name='profile'),
     path('accounts/', include('allauth.urls')),
     path('logout/', LogoutView.as_view(), name='logout'),
