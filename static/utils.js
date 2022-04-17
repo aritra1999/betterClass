@@ -6,10 +6,10 @@ function copyClassCode() {
 }
 
 function exportBoard() {
-    let canvas = document.getElementById("currentCanvas" + currentPage);
-    let dataURL = canvas.toDataURL("image/png");
-    let newTab = window.open('about:blank/Export Canvas', 'image from canvas');
-    newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+    let link = document.createElement('a');
+    link.download = 'board.png';
+    link.href = document.getElementById("currentCanvas" + currentPage).toDataURL()
+    link.click();
 }
 
 function previousPage() {
